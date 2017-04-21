@@ -1,12 +1,10 @@
 package renderer;
 
-import java.awt.Graphics;
+import java.awt.Image;
 
-import world.Entity;
+public interface Renderable {
 
-abstract class Renderable {
-	boolean isVisible;
-	Entity entity;
+	boolean isVisible();
+	Image getSprite();
 	
-	abstract void render(Graphics g);
 }
