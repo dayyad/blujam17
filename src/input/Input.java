@@ -6,17 +6,16 @@ import java.awt.event.MouseEvent;
 import events.Event;
 import events.Events;
 import main.Subject;
+import physics.Move;
 import physics.Physics;
 import world.World;
 
 public class Input extends Subject{
 	//LISTERns
-	private final World world;
 	private final Physics physics;
 	
-	public Input(World world, Physics physics){
+	public Input(Physics physics){
 		super();
-		this.world = world;
 		this.physics = physics;
 	}
 	
@@ -34,12 +33,6 @@ public class Input extends Subject{
 	
 	public void onMouseClick(MouseEvent e){
 		// Handle Mouse click event
-	}
-	
-	private void mouseDown(){
-		Move move = new Move();
-		Event e = Events.newEvent(Events.EventType.MOVE, move);
-		this.notify(e);
 	}
 
 	@Override
