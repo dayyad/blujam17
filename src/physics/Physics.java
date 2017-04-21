@@ -1,12 +1,15 @@
 package physics;
 
-import input.Move;
 import events.Event;
+import events.Events;
 import main.Observerable;
+import world.Collidable;
+import world.Entity;
 import world.World;
 
 public class Physics implements Observerable {
-	World world;
+	private final World world;
+	private final CollisionManager collisionManager = new CollisionManager();
 
 	public Physics(World world) {
 		this.world = world;
@@ -20,19 +23,29 @@ public class Physics implements Observerable {
 			break;
 
 		case TICK:
-			this.world = (World) e.getContext();
+
 			break;
 		}
 	}
 
 	private void move(Move move) {
-		// Move if valid
+		if (this.validateMove(move)){
+			move.execute();
+		}
 	}
 
-	private void validateMove() {
-		// CHECKING FOR COLLISSION
-		if (this.world != null) {
-			// perform some checking using world.
+	private boolean validateMove(Move move) {
+		Entity entity = move.getEntity();
+		double newX = entity.getX() + move.getDeltaX();
+		double newY = entity.getY() + move.getDeltaY();
+		if (!(move.getEntity() instanceof Collidable))return true;
+
+		for(Entity otherEntity : this.world.getEntities()){
+			if (this.collisionManager.checkCollisionMap(newX, newY, ((Collidable)entity).getCollider().getCollisionMap(), otherEntity)){
+				this.notify(Events.newCollisionEvent(entity, otherEntity));
+				return false;
+			}
 		}
+		return true;
 	}
 }
