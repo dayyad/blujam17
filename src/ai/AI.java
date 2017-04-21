@@ -8,7 +8,7 @@ import world.Entity;
 import world.World;;
 
 public class AI extends Subject implements Observerable{
-	private final MovementManager movementManager = new MovementManager();
+	private final MovementManager movementManager;
 
 	private final World world;
 	private final Physics physics;
@@ -16,6 +16,8 @@ public class AI extends Subject implements Observerable{
 	public AI (World world, Physics physics){
 		this.world = world;
 		this.physics = physics;
+
+		this.movementManager = new MovementManager(world.getPlayerEntity());
 	}
 	
 	@Override
