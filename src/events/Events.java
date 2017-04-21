@@ -3,7 +3,11 @@ package events;
 public class Events {
 	
 	public enum EventType {
-		MOVE
+		MOVE,
+		TICK,
+		
+		UPDATE_WORLD,
+		UPDATE_PHYSICS
 	}
 	
 	public static Event newEvent(EventType type){
