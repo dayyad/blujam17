@@ -27,7 +27,11 @@ public class World extends Subject implements Observerable {
 	
 	@Override
 	public void update(Event event) {
+		switch (event.getType()){
 		
+		case TICK :
+			break;
+		}
 	}
 
 	@Override

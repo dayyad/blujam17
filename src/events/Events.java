@@ -1,13 +1,26 @@
 package events;
 
+import world.World;
 public class Events {
 	
 	public enum EventType {
+		
+		//Generic
 		MOVE,
 		TICK,
 		
-		UPDATE_WORLD,
-		UPDATE_PHYSICS
+		//Synchronisation
+		SYNC_WORLD,
+		SYNC_PHYSICS,
+		
+		//Spawning/Instantiation
+		
+		//Physics
+		
+		
+		//Network
+		
+		//
 	}
 	
 	public static Event newEvent(EventType type){
@@ -15,6 +28,10 @@ public class Events {
 	}
 	
 	public static Event newEvent(EventType type, Object context){
-		return new Event(type);
+		return new Event(type, context);
+	}
+	
+	public static Event newTickEvent(World context){
+		return new Event(EventType.TICK, context);
 	}
 }
