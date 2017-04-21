@@ -1,13 +1,16 @@
 package ai;
 import events.Event;
 import main.Observerable;
+import physics.Physics;
 import world.World;;
 
 public class AI implements Observerable{
-	World world;
+	private final World world;
+	private final Physics physics;
 	
-	public AI (World world){
+	public AI (World world, Physics physics){
 		this.world = world;
+		this.physics = physics;
 	}
 	
 	@Override

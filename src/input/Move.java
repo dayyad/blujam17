@@ -9,7 +9,6 @@ public class Move {
 	Entity entity;
 	
 	public Move(){
-		Event e = new 
-		notify(Events.newEvent(Events.EventType.MOVE));
+		
 	}
 }
