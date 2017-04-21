@@ -1,27 +1,50 @@
 package events;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import events.Events.EventType;
 
 public class Event {
 	private EventType type;
-	private Object context;	
+	private Object context = null;
+
+	/**
+	 * Actors, one or more object that event is focused around, can be in
+	 * addition to the context
+	 */
+	private Collection<Object> actors = new ArrayList<>();
 	
-	public Event(EventType type){
+	public Event(EventType type) {
 		this.type = type;
-		this.context = null;
 	}
-	
-	public Event(EventType type, Object context){
+
+	public Event(EventType type, Object context) {
 		this.type = type;
 		this.context = context;
 	}
 	
-	public Object getContext(){
+	/**
+	 * 
+	 * @param An entity to add as actor
+	 */
+	public void addActor(world.Entity e) {
+		this.actors.add(e);
+	}
+
+
+	/**
+	 * @param collection of entities to be added as actors
+	 */
+	public void addActors(Collection<world.Entity> e){
+		this.actors.addAll(e);
+	}
+
+	public Object getContext() {
 		return this.context;
 	}
-	
-	public Events.EventType getType(){
+
+	public Events.EventType getType() {
 		return this.type;
 	}
-	
+
 }

@@ -16,7 +16,7 @@ public class Events {
 		//Spawning/Instantiation
 		
 		//Physics
-		
+		PHYSICS_COLLISION,
 		
 		//Network
 		
@@ -29,6 +29,13 @@ public class Events {
 	
 	public static Event newEvent(EventType type, Object context){
 		return new Event(type, context);
+	}
+	
+	public static Event newCollisionEvent(world.Entity e1, world.Entity e2){
+		Event tempEvent = new Event(EventType.PHYSICS_COLLISION);
+		tempEvent.addActor(e1);
+		tempEvent.addActor(e2);
+		return tempEvent;
 	}
 	
 	public static Event newTickEvent(World context){
