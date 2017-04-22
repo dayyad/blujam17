@@ -1,0 +1,3 @@
+//Subtype is optional. Replace with null where suited
+
+type:NPC,subtype:null,sprite:zombie.jpg

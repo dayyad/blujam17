@@ -1,4 +1,4 @@
-package world;
+package world.movement;
 
 import java.awt.*;
 
