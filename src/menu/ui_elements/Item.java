@@ -7,6 +7,9 @@ import java.awt.*;
  */
 public abstract class Item {
     private int x = 0,y =0, width, height;
+    private menu.Menu parent;
+
+    public void setParent(menu.Menu parent){this.parent = parent;}
 
     public Item(int x, int y, int width, int height){
         this.x = x;
@@ -16,7 +19,8 @@ public abstract class Item {
     }
 
     public boolean contains(int x, int y){
-        return (x >= this.getX() && x <= this.getX() + this.getWidth() && y >= this.getY() && y <= this.getY() + this.getHeight());
+        return (x >= this.getX() + this.parent.getX() && x <= this.getX() + this.parent.getX() + this.getWidth()
+                && y >= this.getY() + this.parent.getY() && y <= this.getY() + this.parent.getY() + this.getHeight());
     }
 
     public void setX(int x){this.x = x;}
