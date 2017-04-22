@@ -37,7 +37,7 @@ public class Main extends Subject {
 		frame.setVisible(false);
 		frame.dispose();
 
-		frame.removeAll();
+//		frame.removeAll();
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setUndecorated(true);
 
@@ -47,19 +47,16 @@ public class Main extends Subject {
 			device.setFullScreenWindow(frame);
 		}
 
-		JPanel panel = new JPanel(true);
-		panel.setPreferredSize(new Dimension(frame.getWidth(), frame.getHeight()));
-		panel.setBounds(0, 0, frame.getWidth(), frame.getHeight());
-		frame.add(panel);
-		frame.pack();
 		frame.setVisible(true);
+		JComponent canvas = ((JComponent)UI.theUI.canvas);
+		UI.setDivider(0);
+		System.out.println(canvas.getSize());
 
-		panel.addKeyListener(inputWrapper);
-		panel.addMouseListener(inputWrapper);
-
-		Globals.mainPanel = panel;
+		Globals.mainGraphics = (Graphics2D)(canvas.getGraphics());
 		Globals.CurrentMenu = new MainMenu(this, frame.getWidth(), frame.getHeight());
 		Globals.inputHandler = this.menuInput;
+		canvas.addKeyListener(inputWrapper);
+		canvas.addMouseListener(inputWrapper);
 	}
 
 	public static void main(String[] args) {
