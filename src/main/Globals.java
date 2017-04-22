@@ -17,4 +17,10 @@ public class Globals {
     public static Menu CurrentMenu;
     public static JComponent mainCanvas;
     public static UserActions inputHandler;
+
+    public static Menu pauseMenu;
+    public static Menu mainMenu;
+
+    public static UserActions gameInputHandler;
+    public static UserActions menuInputHandler;
 }
