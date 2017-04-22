@@ -39,9 +39,16 @@ public abstract class Menu implements Renderable {
     public int getWidth(){return this.width;}
     public int getHeight(){return this.height;}
 
-    public void setBackground(BufferedImage background){this.background = background;}
+    public void setBackground(BufferedImage background){
+        Image img = background.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
+        BufferedImage image = new BufferedImage(img.getWidth(null), img.getWidth(null), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D img_graphics = image.createGraphics();
+        img_graphics.drawImage(img, 0, 0, null);
+        this.background = image;
+    }
     public void add(Item item){
         this.items.add(item);
+        item.setParent(this);
         if (item instanceof InteractableItem){
             this.interactableItems.add((InteractableItem)item);
         }
@@ -50,14 +57,12 @@ public abstract class Menu implements Renderable {
 
     @Override
     public Image getSprite(){
-        Image img = this.background.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
-        BufferedImage image = new BufferedImage(img.getWidth(null), img.getWidth(null), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D img_graphics = image.createGraphics();
-        img_graphics.drawImage(img, 0, 0, null);
+        BufferedImage img = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        img.createGraphics().drawImage(this.background, 0, 0, null);
         for (Item item : this.items){
-            img_graphics.drawImage(item.getImage(), item.getX(), item.getY(), item.getWidth(), item.getHeight(), null);
+            img.createGraphics().drawImage(item.getImage(), item.getX(), item.getY(), item.getWidth(), item.getHeight(), null);
         }
-        return image;
+        return img;
     }
 
     @Override
