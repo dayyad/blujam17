@@ -84,7 +84,7 @@ public class Input extends UserActions implements Observerable{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-
+		subject.notifyObservers(Events.newShootEvent(this.player));
 	}
 
 	@Override

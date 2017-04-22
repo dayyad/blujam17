@@ -16,6 +16,7 @@ public class Events {
 		INITIAL_LOAD,
 		LOAD_LEVEL,
 		MENU_UPDATE,
+		SHOOT,
 		//Spawning/Instantiation
 		
 		//Physics
@@ -72,5 +73,9 @@ public class Events {
 
 	public static Event newStopEvent(Entity entity){
 		return Events.newEvent(EventType.STOP, entity);
+	}
+
+	public static Event newShootEvent(Entity entity){
+		return new Event(EventType.SHOOT, entity);
 	}
 }

@@ -53,6 +53,7 @@ public class Main extends Subject {
 		this.addObservers(this.soundManager);
 
 		this.physics.addObservers(this.soundManager);
+		this.physics.addObservers(this.physics);
 		this.ai.addObservers(this.physics);
 		this.world.addObservers(this.soundManager);
 		this.input.addObservers(this.physics);

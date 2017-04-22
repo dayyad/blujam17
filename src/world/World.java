@@ -79,7 +79,7 @@ public class World extends Subject implements Observerable {
 		entities.add(entity);
 	}
 
-	public Collection<Entity> getEntitiesWithType(String type) {
+	public synchronized Collection<Entity> getEntitiesWithType(String type) {
 		Set<Entity> returnEnts = new HashSet<>();
 		returnEnts.addAll(entityMap.get(type));
 		if(currentLevel != null){returnEnts.addAll(currentLevel.getEntitiesWithType(type));}

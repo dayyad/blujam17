@@ -5,12 +5,18 @@ import events.Events;
 import main.Observerable;
 import main.Subject;
 import world.Entity;
+import world.Projectile;
 import world.World;
 import world.movement.Collidable;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class Physics extends Subject implements Observerable {
 	private final World world;
 	private final CollisionManager collisionManager = new CollisionManager();
+
+	private Collection<Projectile> projectiles = new ArrayList<>();
 
 	public Physics(World world) {
 		this.world = world;
@@ -19,13 +25,18 @@ public class Physics extends Subject implements Observerable {
 	@Override
 	public void update(Event e) {
 		switch (e.getType()) {
-		case MOVE:
-			this.move((Move) e.getContext());
-			break;
+			case SHOOT:
+				this.projectiles.add(((Entity)e.getContext()).shoot());
+				break;
+			case MOVE:
+				this.move((Move) e.getContext());
+				break;
 
-		case TICK:
-
-			break;
+			case TICK:
+				for (Projectile projectile : this.projectiles){
+					this.notifyObservers(Events.newMoveEvent(projectile.getMovement()));
+				}
+				break;
 		}
 	}
 

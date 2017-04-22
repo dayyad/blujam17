@@ -82,7 +82,7 @@ public class Loader {
                     case "Player":
                         x = Double.parseDouble(fieldMap.get("positionX"));
                         y = Double.parseDouble(fieldMap.get("positionY"));
-                        newEntity = new Player(x, y);
+//                        newEntity = new Player(x, y);
                         ((Player) newEntity).setFrames(animationMap.get("Player"));
                         ((Player) newEntity).setCollisionMap(collisionMap.get("Player"));
                         break;

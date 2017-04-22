@@ -1,5 +1,7 @@
 package world;
 
+import main.Globals;
+
 /**
  * @author Vo
  *
@@ -122,4 +124,11 @@ public abstract class Entity {
 	public double getY() {
 		return this.y;
 	}
+
+	public Projectile shoot(){
+		Projectile projectile = new Projectile(this.getX(), this.getY(), this.getRotation(), this);
+		Globals.world.addEntity(projectile);
+		return projectile;
+	}
+
 }
