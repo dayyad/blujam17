@@ -15,12 +15,20 @@ public class Player extends Entity implements Collidable, Animatable{
 	int currentFrame;
 	Animator animator;
 	Color[][] collisionMap;
+	double health;
 
-	public Player(double x, double y, Image sprite){
+	public Player(double x, double y){
 		this.animator = new Animator();
 		this.rotation = 0;
 		this.x = x;
 		this.y = y;
+	}
+	public void removeHealth(double h){
+		this.health -= h;
+	}
+
+	public void addHealth(double h){
+		this.health += h;
 	}
 
 	@Override
