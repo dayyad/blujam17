@@ -2,6 +2,7 @@ package physics;
 
 import events.Event;
 import events.Events;
+import main.Globals;
 import main.Observerable;
 import main.Subject;
 import world.Entity;
@@ -11,12 +12,13 @@ import world.movement.Collidable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Physics extends Subject implements Observerable {
 	private final World world;
 	private final CollisionManager collisionManager = new CollisionManager();
 
-	private Collection<Projectile> projectiles = new ArrayList<>();
+	private List<Projectile> projectiles = new ArrayList<>();
 
 	public Physics(World world) {
 		this.world = world;
@@ -33,8 +35,17 @@ public class Physics extends Subject implements Observerable {
 				break;
 
 			case TICK:
-				for (Projectile projectile : this.projectiles){
-					this.notifyObservers(Events.newMoveEvent(projectile.getMovement()));
+				for (int i = 0; i < this.projectiles.size(); i++){
+					if (this.projectiles.get(i).getX() < 0
+							|| this.projectiles.get(i).getY() < 0
+							|| this.projectiles.get(i).getX() > Globals.mainCanvas.getWidth()
+							|| this.projectiles.get(i).getY() > Globals.mainCanvas.getHeight()){
+						Globals.world.removeEntity(this.projectiles.get(i));
+						this.projectiles.remove(i);
+						i--;
+						continue;
+					}
+					this.notifyObservers(Events.newMoveEvent(this.projectiles.get(i).getMovement()));
 				}
 				break;
 		}

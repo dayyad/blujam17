@@ -14,7 +14,7 @@ import java.io.IOException;
  * Created by mgoo on 23/04/17.
  */
 public class Projectile extends Entity implements Renderable, Collidable {
-    public static double PROJECTILE_SPEED = 10;
+    public static double PROJECTILE_SPEED = 20;
 
     BufferedImage sprite;
     Entity owner;

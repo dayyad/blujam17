@@ -1,5 +1,6 @@
 package world;
 
+import main.Globals;
 import renderer.Renderable;
 
 import javax.imageio.ImageIO;
@@ -12,6 +13,9 @@ import java.io.IOException;
  * Created by mgoo on 23/04/17.
  */
 public class Footstep extends Entity implements Renderable {
+    private static long MAX_AGE = 100;
+
+    long age = 0;
     BufferedImage sprite;
 
     public Footstep(double x, double y, double rotation){
@@ -34,7 +38,8 @@ public class Footstep extends Entity implements Renderable {
 
     @Override
     public Image getSprite() {
-
+        age++;
+        if (age > MAX_AGE) Globals.world.removeEntity(this);
         return this.sprite;
     }
 }

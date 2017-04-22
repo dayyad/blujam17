@@ -18,8 +18,8 @@ public class NPC extends Entity implements world.movement.Collidable, Animatable
 
     @Override
     public void move(double deltaX, double deltaY) {
-        if (Math.random() > 0.98) {
-            Globals.world.addEntity(new Footstep(this.getX(), this.getY(), this.getRotation()));
+        if (Math.random() > 0.9) {
+            Globals.world.addEntity(new Footstep(this.getX() + (Math.random()*20 - 10), this.getY() + (Math.random()*20 -10), this.getRotation()));
         }
 
         double padding = 0;
