@@ -4,8 +4,11 @@ import ecs100.UI;
 import menu.ui_elements.InteractableItem;
 import menu.ui_elements.Item;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -45,7 +48,7 @@ public class Menu {
     }
     public List<InteractableItem> getInteractableItems(){return this.interactableItems;}
 
-    public void render(Graphics2D g){
+    public void render(Graphics g){
         g.drawImage(this.background, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
         for (Item item : this.items){
             item.render(g);

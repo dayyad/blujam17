@@ -53,7 +53,7 @@ public class Button extends InteractableItem {
     }
 
     @Override
-    public void render(Graphics2D g) {
+    public void render(Graphics g) {
         switch(this.state){
             case NORMAL:
                 g.drawImage(this.normal, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);

@@ -30,5 +30,5 @@ public abstract class Item {
     public int getHeight(){return this.height;}
 
 
-    public abstract void render(Graphics2D g);
+    public abstract void render(Graphics g);
 }

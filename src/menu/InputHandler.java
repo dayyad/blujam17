@@ -33,16 +33,19 @@ public class InputHandler extends UserActions{
     @Override
     public void mousePressed(MouseEvent e) {
         Globals.CurrentMenu.getInteractableItems().forEach((item) -> item.onPress(e.getX(), e.getY()));
+        Globals.CurrentMenu.render(Globals.mainCanvas.getGraphics());
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         Globals.CurrentMenu.getInteractableItems().forEach((item) -> item.onRelease(e.getX(), e.getY()));
+        Globals.CurrentMenu.render(Globals.mainCanvas.getGraphics());
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         Globals.CurrentMenu.getInteractableItems().forEach((item) -> item.onMove(e.getX(), e.getY()));
+        Globals.CurrentMenu.render(Globals.mainCanvas.getGraphics());
     }
 
     @Override

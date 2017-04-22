@@ -1,5 +1,6 @@
 package menu;
 
+import main.Globals;
 import main.Main;
 
 import javax.imageio.ImageIO;
@@ -21,6 +22,7 @@ public class MainMenu extends Menu{
             Image pressedImage = ImageIO.read(new File("assets/Misc/crystal.png"));
             menu.ui_elements.Button startButton = new menu.ui_elements.Button(10,10,50,50, baseImage, hoveImage, pressedImage);
             startButton.setOnClickEvent(main::start);
+
             this.add(startButton);
         } catch (IOException e) {
             e.printStackTrace();
@@ -31,6 +33,7 @@ public class MainMenu extends Menu{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        render(Globals.mainCanvas.getGraphics());
     }
 
 }
