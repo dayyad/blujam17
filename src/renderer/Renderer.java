@@ -19,7 +19,7 @@ public class Renderer implements Observerable {
 	
 
 	public Renderer(World world) {
-		this.offScreen = new BufferedImage(main.Globals.mainPanel.getWidth(), main.Globals.mainPanel.getHeight(),
+		this.offScreen = new BufferedImage(main.Globals.mainGraphics.getWidth(), main.Globals.mainGraphics.getHeight(),
 				BufferedImage.TYPE_INT_ARGB);
 		this.world = world;
 	}
@@ -41,9 +41,9 @@ public class Renderer implements Observerable {
 		}
 
 		// Swapping current graphics to be off screen image.
-		main.Globals.mainPanel.getGraphics().drawImage(offScreen, 0, 0, null);
+		main.Globals.mainGraphics.createGraphics().drawImage(offScreen, 0, 0, null);
 		// Making new image offscreen of same size as current screen.
-		this.offScreen = new BufferedImage(main.Globals.mainPanel.getWidth(), main.Globals.mainPanel.getHeight(),
+		this.offScreen = new BufferedImage(main.Globals.mainGraphics.getWidth(), main.Globals.mainGraphics.getHeight(),
 				BufferedImage.TYPE_INT_ARGB);
 
 	}
