@@ -1,11 +1,13 @@
 package world;
 import java.awt.Image;
 import java.util.Collection;
+import java.util.List;
 
 public interface Animatable {
 	
-	Collection<Image> getFrames();
-	void setFrames(Collection<Image> frames);
+	List<Image> getFrames();
+	void setFrames(List<Image> frames);
+	Animator getAnimator();
 	
 	/**
 	 * boolean isVisibile();
