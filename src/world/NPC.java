@@ -1,5 +1,7 @@
 package world;
 
+import main.Globals;
+
 import java.awt.Color;
 import java.awt.Image;
 import java.util.Collection;
@@ -16,6 +18,10 @@ public class NPC extends Entity implements world.movement.Collidable, Animatable
 
     @Override
     public void move(double deltaX, double deltaY) {
+        if (Math.random() > 0.98) {
+            Globals.world.addEntity(new Footstep(this.getX(), this.getY(), this.getRotation()));
+        }
+
         double padding = 0;
         double adj = 0;
         double opp = 0;
