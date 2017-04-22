@@ -1,22 +1,62 @@
 package menu;
 
-import ecs100.UI;
 import main.Globals;
-import menu.ui_elements.InteractableItem;
+import main.UserActions;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 /**
  * Created by mgoo on 22/04/17.
  */
-public class InputHandler {
-    public void doMouse(String action, double x, double y){
-        for (InteractableItem item : Globals.CurrentMenu.getInteractableItems()){
-            item.onAction(action, x, y);
-        }
-        Globals.CurrentMenu.render();
+public class InputHandler extends UserActions{
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // Unused
     }
 
-    public void doKey(String key){
-        System.out.println(key);
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // Unused
     }
 
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // Unused
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // Unused
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        Globals.CurrentMenu.getInteractableItems().forEach((item) -> item.onPress(e.getX(), e.getY()));
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        Globals.CurrentMenu.getInteractableItems().forEach((item) -> item.onRelease(e.getX(), e.getY()));
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        Globals.CurrentMenu.getInteractableItems().forEach((item) -> item.onMove(e.getX(), e.getY()));
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        // Unused
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        // Unused
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        // Unused
+    }
 }

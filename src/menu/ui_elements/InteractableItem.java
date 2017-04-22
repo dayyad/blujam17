@@ -8,5 +8,8 @@ public abstract class InteractableItem extends Item {
         super(x, y, width, height);
     }
 
-    public abstract void onAction(String action, double x, double y);
+    public abstract void onClick(int x, int y);
+    public abstract void onPress(int x, int y);
+    public abstract void onRelease(int x, int y);
+    public abstract void onMove(int x, int y);
 }

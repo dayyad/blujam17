@@ -45,10 +45,10 @@ public class Menu {
     }
     public List<InteractableItem> getInteractableItems(){return this.interactableItems;}
 
-    public void render(){
-        UI.drawImage(this.background, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+    public void render(Graphics2D g){
+        g.drawImage(this.background, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
         for (Item item : this.items){
-            item.render();
+            item.render(g);
         }
     }
 }
