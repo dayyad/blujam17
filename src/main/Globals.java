@@ -15,6 +15,6 @@ public class Globals {
 
     public static GameState gameState = GameState.IN_MENU;
     public static Menu CurrentMenu;
-    public static Graphics2D mainGraphics;
+    public static JComponent mainCanvas;
     public static UserActions inputHandler;
 }

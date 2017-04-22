@@ -37,7 +37,6 @@ public class Main extends Subject {
 		frame.setVisible(false);
 		frame.dispose();
 
-//		frame.removeAll();
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setUndecorated(true);
 
@@ -50,9 +49,8 @@ public class Main extends Subject {
 		frame.setVisible(true);
 		JComponent canvas = ((JComponent)UI.theUI.canvas);
 		UI.setDivider(0);
-		System.out.println(canvas.getSize());
 
-		Globals.mainGraphics = (Graphics2D)(canvas.getGraphics());
+		Globals.mainCanvas = canvas;
 		Globals.CurrentMenu = new MainMenu(this, frame.getWidth(), frame.getHeight());
 		Globals.inputHandler = this.menuInput;
 		canvas.addKeyListener(inputWrapper);
