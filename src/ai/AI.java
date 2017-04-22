@@ -24,13 +24,12 @@ public class AI extends Subject implements Observerable{
 			case TICK:
 				for (Entity entity : this.world.getEntitiesWithType("NPC")){
 					double[] movement = this.movementManager.getMovement(entity);
-					System.out.println("{ " + movement[0] + " , "  + movement[1] + " }");
+					//System.out.println("{ " + movement[0] + " , "  + movement[1] + " }");
 					this.notifyObservers(Events.newMoveEvent(entity, movement[0], movement[1]));
 				}
 				break;
 			case LOAD:
 				this.movementManager = new MovementManager(((World)event.getContext()).getEntitiesWithType("Player").iterator().next());
-//				this.movementManager = new MovementManager(null);
 				break;
 		}
 	}
