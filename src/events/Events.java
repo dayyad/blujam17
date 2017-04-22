@@ -10,6 +10,7 @@ public class Events {
 		
 		//Generic
 		MOVE,
+		STOP,
 		TICK,
 		LOAD,
 		INITIAL_LOAD,
@@ -67,5 +68,9 @@ public class Events {
 
 	public static Event newMenuUpdate(){
 		return Events.newEvent(EventType.MENU_UPDATE);
+	}
+
+	public static Event newStopEvent(Entity entity){
+		return Events.newEvent(EventType.STOP, entity);
 	}
 }

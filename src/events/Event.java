@@ -3,6 +3,7 @@ package events;
 import java.util.ArrayList;
 import java.util.Collection;
 import events.Events.EventType;
+import world.Entity;
 
 public class Event {
 	private EventType type;
@@ -30,7 +31,6 @@ public class Event {
 	public void addActor(world.Entity e) {
 		this.actors.add(e);
 	}
-
 
 	/**
 	 * @param collection of entities to be added as actors

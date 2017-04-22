@@ -10,43 +10,70 @@ import events.Events;
 import main.*;
 import physics.Move;
 import physics.Physics;
+import world.Entity;
 import world.World;
 
 public class Input extends UserActions implements Observerable{
+	private static final int MOUSE_MOVE = 0;
+	private static final int MOUSE_CLICK = 1;
+
+	private enum Action{
+		ROTATE, PAUSE, MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT
+	}
+
+	private Entity player;
 	private Subject subject;
 	private Map<Integer, Boolean> keyPressedMap = new HashMap<>();
-	private Map<Integer, Command> keyBindings = new HashMap<>();
+	private Map<Action, Integer> keyBindings = new HashMap<>();
 	
-	public Input(Physics physics){
+	public Input(){
 		super();
-		keyBindings.put(KeyEvent.VK_W, new Move(0, -2.5));
-		keyBindings.put(KeyEvent.VK_A, new Move(-2.5, 0));
-		keyBindings.put(KeyEvent.VK_S, new Move( 0, 2.5));
-		keyBindings.put(KeyEvent.VK_D, new Move( 2.5, 0));
+		keyBindings.put(Action.MOVE_UP, KeyEvent.VK_W);
+		keyBindings.put(Action.MOVE_LEFT, KeyEvent.VK_A);
+		keyBindings.put(Action.MOVE_DOWN, KeyEvent.VK_S);
+		keyBindings.put(Action.MOVE_RIGHT, KeyEvent.VK_D);
+
+		keyPressedMap.put(KeyEvent.VK_W, false);
+		keyPressedMap.put(KeyEvent.VK_A, false);
+		keyPressedMap.put(KeyEvent.VK_S, false);
+		keyPressedMap.put(KeyEvent.VK_D, false);
+
+		keyBindings.put(Action.PAUSE, KeyEvent.VK_ESCAPE);
+
+		keyBindings.put(Action.ROTATE, MOUSE_MOVE);
 
 		this.subject = new Subject() {
 			@Override
 			protected void initObservers() {
-				this.addObservers(physics);
+
 			}
 		};
 	}
 
+	public void addObservers(Observerable observer){
+		subject.addObservers(observer);
+	}
+
 	@Override
 	public void keyTyped(KeyEvent e) {
-		System.out.println("Recived keyTyped");
 
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (!this.keyBindings.keySet().contains(e.getKeyCode()))return;
-		this.keyPressedMap.put(e.getKeyCode(), true);
+		if (!this.keyBindings.values().contains(e.getKeyCode()))return;
+		if (this.keyBindings.get(Action.PAUSE).equals(e.getKeyCode())){
+			Globals.gameState = Globals.GameState.PAUSED;
+			Globals.CurrentMenu = Globals.pauseMenu;
+			Globals.inputHandler = Globals.menuInputHandler;
+		} else {
+			this.keyPressedMap.put(e.getKeyCode(), true);
+		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (!this.keyBindings.keySet().contains(e.getKeyCode()))return;
+		if (!this.keyBindings.values().contains(e.getKeyCode()))return;
 		this.keyPressedMap.put(e.getKeyCode(), false);
 	}
 
@@ -77,7 +104,9 @@ public class Input extends UserActions implements Observerable{
 
 	@Override
 	public void mouseMoved(MouseEvent e){
-
+		if (this.keyBindings.get(Action.ROTATE) == MOUSE_MOVE){
+			this.player.pointTo(e.getX(), e.getY());
+		}
 	}
 
 	@Override
@@ -89,16 +118,33 @@ public class Input extends UserActions implements Observerable{
 	public void update(Event event) {
 		switch (event.getType()){
 			case TICK:
-				for (Integer key : this.keyPressedMap.keySet()){
-					if (this.keyPressedMap.get(key)){
-						subject.notifyObservers(Events.newMoveEvent((Move)this.keyBindings.get(key)));
-					}
+				double deltaX = 0, deltaY = 0;
+				if (this.keyPressedMap.get(this.keyBindings.get(Action.MOVE_DOWN))){
+					deltaY++;
+				}
+				if (this.keyPressedMap.get(this.keyBindings.get(Action.MOVE_UP))){
+					deltaY--;
+				}
+				if (this.keyPressedMap.get(this.keyBindings.get(Action.MOVE_LEFT))){
+					deltaX--;
+				}
+				if (this.keyPressedMap.get(this.keyBindings.get(Action.MOVE_RIGHT))){
+					deltaX++;
+				}
+
+				if (deltaX == 0 && deltaY == 0){
+					subject.notifyObservers(Events.newStopEvent(this.player));
+				} else if (deltaX == 0 ^ deltaY == 0){
+					subject.notifyObservers(Events.newMoveEvent(this.player, deltaX * this.player.getMovementSpeed(), deltaY * this.player.getMovementSpeed()));
+				} else {
+					double hyp = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+					deltaX = (this.player.getMovementSpeed() / hyp * deltaX);
+					deltaY = (this.player.getMovementSpeed() / hyp * deltaY);
+					subject.notifyObservers(Events.newMoveEvent(this.player, deltaX, deltaY));
 				}
 				break;
 			case LOAD:
-				this.keyBindings.values().stream().forEach((value) -> {
-					value.setActor(((World)event.getContext()).getEntitiesWithType("Player").iterator().next());
-				});
+				this.player = ((World)event.getContext()).getEntitiesWithType("Player").iterator().next();
 				break;
 		}
 	}
