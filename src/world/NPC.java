@@ -22,11 +22,11 @@ public class NPC extends Entity implements world.movement.Collidable, Animatable
 		// Check what quarter of the rotation the
 
 		// Top right facing
-		if (deltaX >= 0 && deltaY >= 0) {
+		if (deltaX >= 0 && deltaY <= 0) {
 			padding = 0;
 			adj = deltaY;
 			opp = deltaX;
-		} else if (deltaX >= 0 && deltaY < 0) {
+		} else if (deltaX >= 0 && deltaY > 0) {
 			// Bot right
 			padding = Math.PI/2;
 			adj = deltaX;
@@ -36,7 +36,7 @@ public class NPC extends Entity implements world.movement.Collidable, Animatable
 			padding = Math.PI;
 			adj = deltaY;
 			opp = deltaX;
-		} else if (deltaX < 0 && deltaY > 0){
+		} else if (deltaX < 0 && deltaY < 0){
 			//top left
 			padding = Math.PI * 2;
 			adj = deltaX;
