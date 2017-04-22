@@ -73,7 +73,9 @@ public class World extends Subject implements Observerable {
 		if (entity instanceof world.movement.Collidable) {
 			entityMap.get("Collidable").add(entity);
 		}
-
+		if (entity instanceof Stage){
+			entityMap.get("Stage").add(entity);
+		}
 		entities.add(entity);
 	}
 

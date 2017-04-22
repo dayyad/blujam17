@@ -6,10 +6,14 @@ import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.nio.Buffer;
+import java.util.Collection;
+import java.util.NoSuchElementException;
 
 import events.Event;
 import main.Globals;
 import main.Observerable;
+import world.Entity;
+import world.Stage;
 import world.World;
 
 public class Renderer implements Observerable {
@@ -37,11 +41,21 @@ public class Renderer implements Observerable {
 				BufferedImage.TYPE_INT_ARGB);
 		// Render world
 
+		// There is only ever one stage
+		try {
+			Renderable stage = (Renderable) world.getEntitiesWithType("Stage").iterator().next();
+			drawToOffScreen(stage.getSprite(), stage.getX(), stage.getY(), stage.getRotation());
+		} catch (NoSuchElementException e){
+
+		}
+
 			for (world.Entity entity : world.getEntitiesWithType("Renderable")) {
+				if (entity instanceof Stage)continue;
 				drawToOffScreen(((Renderable) entity).getSprite(), entity.getX(), entity.getY(), entity.getRotation());
 			}
 
 			for (world.Entity entity : world.getEntitiesWithType("Animatable")) {
+				if (entity instanceof Stage)continue;
 				drawToOffScreen(((world.Animatable) entity).getAnimator().nextFrame(), entity.getX(), entity.getY(),
 						entity.getRotation());
 			}
