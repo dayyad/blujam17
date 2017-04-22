@@ -4,15 +4,40 @@ import world.Entity;
 import world.movement.Collidable;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by mgoo on 22/04/17.
  */
 public class CollisionManager {
-    public static final Color COLLISION_COLOR = new Color(255,0,0);
+    public Map<Color, CollisionType> collisionTypeMap = new HashMap<>();
+
+    public enum CollisionType{
+        NEXT_LEVEL, PRE_LEVEL, ENTITY, MAP, WIN_GAME, START_GAME
+    }
 
     public CollisionManager(){
+        this.collisionTypeMap.put(new Color(255, 0,48), CollisionType.MAP);
+        this.collisionTypeMap.put(new Color(255, 0,48), CollisionType.ENTITY);
+        this.collisionTypeMap.put(new Color(0, 255,6), CollisionType.NEXT_LEVEL);
+        this.collisionTypeMap.put(new Color(0, 199,3), CollisionType.PRE_LEVEL);
+        this.collisionTypeMap.put(new Color(107,255,109), CollisionType.WIN_GAME);
+        this.collisionTypeMap.put(new Color(0,53,1), CollisionType.START_GAME);
+    }
 
+    boolean checkCollision(double x1, double y1, Color[][] collisionMap, double xl1, double yl1, double xl2, double yl2){
+        double grad = Math.abs(yl1 - yl2)/Math.abs(xl1 - xl2);
+        for (double x = xl1, y = yl1; x <= xl2; x++,y+=grad){
+            if (x-x1 >= 0 && y-y1 >= 0 && x-x1 < collisionMap.length && y-y1 < collisionMap[0].length){
+                if (collisionTypeMap.containsKey(collisionMap[(int)(x-x1)][(int)(y-y1)])){
+                    // colleuisuioatadjal
+                    return true;
+                }
+            }
+        }
+        // NO coluisuison
+        return false;
     }
 
     boolean checkCollisionMap(double x1, double y1, Color[][] collisionMap1, Entity otherEntity){
@@ -52,11 +77,38 @@ public class CollisionManager {
 
         for (x1_i = x1_i, x2_i = x2_i; x1_i < collisionMap1.length && x2_i < collisionMap2.length; x1_i++, x2_i++){
             for (y1_i = y1_i,y2_i = y2_i; y1_i < collisionMap1[0].length && y2_i < collisionMap2[0].length; y1_i++, y2_i++){
-                if (collisionMap1[x1_i][y1_i].equals(COLLISION_COLOR) && collisionMap2[x2_i][y2_i].equals(COLLISION_COLOR)){
+                if (collisionTypeMap.containsKey(collisionMap1[x1_i][y1_i]) && collisionTypeMap.containsKey(collisionMap2[x2_i][y2_i])){
                     return true;
                 }
             }
         }
         return false;
     }
+
+    /*private Color[][] getRotatedCollisionMap(Color[][] collisionMap, double theta){
+        new
+        for (int x=0;x<width;x++){
+            for (int y=0;y<height;y++){
+                double posX=x-width/2,posY=y-height/2;
+                double angle1=(Math.toDegrees(Math.atan(Math.abs(posX/posY))));
+                double Hypo=Math.sqrt((posX*posX)+(posY*posY));
+                if (posX<0){
+                    if (posY<0)angle1-=angle; //yea
+                    if (posY>=0)angle1+=angle;
+                }
+                if (posX>=0){
+                    if (posY<0)angle1+=angle;
+                    if (posY>=0)angle1-=angle; //yea
+                }
+                double newposX=(Hypo*Math.sin(Math.toRadians(angle1)));
+                double newposY=(Hypo*Math.cos(Math.toRadians(angle1)));
+                if (posX<0)newposX*=-1;
+                if (posY<0)newposY*=-1;
+                try{
+                    tempImg[x][y]=permImg[(int) Math.round(width/2+newposX)][(int) Math.round(height/2+newposY)];
+                } catch (Exception e){}
+            }
+        }
+        this.draw();
+    }*/
 }
