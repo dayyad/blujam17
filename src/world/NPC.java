@@ -31,19 +31,20 @@ public class NPC extends Entity implements world.movement.Collidable, Animatable
 			padding = Math.PI/2;
 			adj = deltaX;
 			opp = deltaY;
-		} else if (deltaX <0 && deltaY < 0){
+		} else if (deltaX < 0 && deltaY > 0){
 			//bot left
 			padding = Math.PI;
 			adj = deltaY;
 			opp = deltaX;
 		} else if (deltaX < 0 && deltaY < 0){
 			//top left
-			padding = Math.PI * 2;
+			padding = Math.PI * 3/2;
 			adj = deltaX;
 			opp = deltaY;
 		}
-		
-		this.rotation = Math.atan(opp/adj) + padding;
+
+		this.rotation = Math.atan(Math.abs(opp)/Math.abs(adj)) + padding + Math.PI;
+		System.out.println(this.rotation);
 		this.x += deltaX;
 		this.y += deltaY;
 	}

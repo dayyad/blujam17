@@ -52,8 +52,9 @@ public class Renderer implements Observerable {
 	}
 
 	private void drawToOffScreen(Image sprite, double x, double y, double rotation) {
-		AffineTransform af = AffineTransform.getRotateInstance(rotation);
+		AffineTransform af = new AffineTransform();
 		af.translate(x, y);
+		af.rotate(rotation, sprite.getWidth(null)/2, sprite.getHeight(null)/2);
 		this.offScreen.createGraphics().drawImage(sprite, af, null);
 	}
 }
