@@ -60,6 +60,11 @@ public class World extends Subject implements Observerable {
 		entities.add(e);
 		entityMap.get("Collidable").add(e);
 	}
+	
+	public void addRenderableEntity(Entity e){
+		entities.add(e);
+		entityMap.get("Renderable").add(e);
+	}
 
 	/**
 	 * @return gets entities that implement collidable
