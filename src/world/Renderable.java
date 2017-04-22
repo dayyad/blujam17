@@ -1,4 +1,4 @@
-package renderer;
+package world;
 
 import java.awt.Image;
 

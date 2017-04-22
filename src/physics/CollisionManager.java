@@ -1,7 +1,7 @@
 package physics;
 
-import world.Collidable;
 import world.Entity;
+import world.movement.Collidable;
 
 import java.awt.*;
 

@@ -45,7 +45,6 @@ public class Renderer implements Observerable {
 		// Making new image offscreen of same size as current screen.
 		this.offScreen = new BufferedImage(Globals.mainCanvas.getWidth(), Globals.mainCanvas.getHeight(),
 				BufferedImage.TYPE_INT_ARGB);
-
 	}
 
 	private void drawToOffScreen(Image sprite, double x, double y, double rotation) {
