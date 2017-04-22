@@ -88,6 +88,7 @@ public class Main extends Subject {
 		Globals.menuInputHandler = this.menuInput;
 		Globals.gameInputHandler = this.input;
 		Globals.inputHandler = Globals.menuInputHandler;
+		Globals.world = this.world;
 		canvas.addKeyListener(inputWrapper);
 		canvas.addMouseListener(inputWrapper);
 		canvas.addMouseMotionListener(inputWrapper);
@@ -117,6 +118,7 @@ public class Main extends Subject {
 		this.world.notifyObservers(Events.newLoadEvent(this.world));*/
 
 		try {
+//			ImageIO.read(new File("assets/Menus/start_button.png"))
 			Stage entity = new Stage(ImageIO.read(new File("assets/Maps/map_0.jpg")), null);
 
 			NPC npc = new NPC();
@@ -129,7 +131,7 @@ public class Main extends Subject {
 			});
 			npc.move(500, 500);
 			npc.setMovementSpeed(2);
-			Player player = new Player(300, 300, null);
+			Player player = new Player(300, 300);
 			player.setFrames(new ArrayList<Image>() {
 				{
 					this.add(ImageIO.read(new File("assets/Animations/Walk/human_walk_1.png")));
