@@ -32,6 +32,7 @@ public class Button extends InteractableItem {
     public void onMove(int x, int y) {
         if (this.contains(x, y)){
             this.state = State.HOVER;
+            System.out.println("hovering");
         } else {
             this.state = State.NORMAL;
         }
@@ -45,6 +46,19 @@ public class Button extends InteractableItem {
     private State state = State.NORMAL;
     private Click onClickEvent;
 
+    public Button(int x, int y, int width, int height, Image normal){
+        super(x, y, width, height);
+        this.normal = normal;
+        this.hover = normal;
+        this.pressed = normal;
+    }
+
+    public Button(int x, int y, int width, int height, Image normal, Image hover){
+        super(x, y, width, height);
+        this.normal = normal;
+        this.hover = hover;
+    }
+
     public Button(int x, int y, int width, int height, Image normal, Image hover, Image pressed){
         super(x, y, width, height);
         this.normal = normal;
@@ -52,17 +66,35 @@ public class Button extends InteractableItem {
         this.pressed = pressed;
     }
 
+    public void setNormalImg(Image normal){this.normal = normal;}
+    public void setHoverImg(Image hover){this.hover = hover;}
+    public void setPressedImg(Image pressed){this.pressed = pressed;}
+
     @Override
     public void render(Graphics g) {
         switch(this.state){
             case NORMAL:
-                g.drawImage(this.normal, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+                if (this.normal != null){
+                    g.drawImage(this.normal, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+                }
                 break;
             case HOVER:
-                g.drawImage(this.hover, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+                if (this.hover == null){
+                    if (this.normal != null){
+                        g.drawImage(this.normal, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+                    }
+                } else {
+                    g.drawImage(this.hover, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+                }
                 break;
             case PRESSED:
-                g.drawImage(this.pressed, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+                if (this.hover == null){
+                    if (this.normal != null){
+                        g.drawImage(this.normal, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+                    }
+                } else {
+                    g.drawImage(this.pressed, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+                }
                 break;
         }
     }
