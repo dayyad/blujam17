@@ -14,7 +14,7 @@ import java.io.IOException;
 public class PauseMenu extends Menu{
     public PauseMenu(Main main, int screenWidth, int screenHeight){
         super (screenWidth/2 - 100, screenHeight/2 - 100, 200, 200);
-        try {
+        /*try {
             Image start = ImageIO.read(new File("assets/Menus/start_button.png"));
             Image quit = ImageIO.read(new File("assets/Menus/quit_button.png"));
 
@@ -28,7 +28,7 @@ public class PauseMenu extends Menu{
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
     }
 }

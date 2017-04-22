@@ -14,6 +14,7 @@ public class Events {
 		LOAD,
 		INITIAL_LOAD,
 		LOAD_LEVEL,
+		MENU_UPDATE,
 		//Spawning/Instantiation
 		
 		//Physics
@@ -62,5 +63,9 @@ public class Events {
 		Event moveEvent = new Event(EventType.MOVE, move);
 		moveEvent.addActor(move.getActor());
 		return moveEvent;
+	}
+
+	public static Event newMenuUpdate(){
+		return Events.newEvent(EventType.MENU_UPDATE);
 	}
 }

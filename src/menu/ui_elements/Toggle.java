@@ -37,26 +37,24 @@ public class Toggle extends InteractableItem {
     }
 
     @Override
-    public void render(Graphics g) {
+    public Image getImage() {
         switch (this.state){
             case NORMAL:
-                this.drawNormal(g);
-                break;
+                return this.getNormal();
             case HOVER:
                 if (hover == null){
-                    this.drawNormal(g);
+                    return this.getNormal();
                 } else {
-                    g.drawImage(this.hover, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+                    return this.hover;
                 }
-                break;
             case PRESS:
                 if (pressed == null){
-                    this.drawNormal(g);
+                    return this.getNormal();
                 } else {
-                    g.drawImage(this.pressed, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+                    return this.pressed;
                 }
-                break;
         }
+        return null;
     }
 
     public enum State{
@@ -85,11 +83,11 @@ public class Toggle extends InteractableItem {
         this.dataToggle = initialState;
     }
 
-    private void drawNormal(Graphics g){
+    private Image getNormal(){
         if (this.dataToggle) {
-            g.drawImage(this.on, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+            return this.on;
         } else {
-            g.drawImage(this.off, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+            return this.off;
         }
     }
 }

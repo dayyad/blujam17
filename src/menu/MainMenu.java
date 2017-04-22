@@ -45,7 +45,6 @@ public class MainMenu extends Menu{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        render(Globals.mainCanvas.getGraphics());
     }
 
 }

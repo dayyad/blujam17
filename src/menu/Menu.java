@@ -3,12 +3,14 @@ package menu;
 import ecs100.UI;
 import menu.ui_elements.InteractableItem;
 import menu.ui_elements.Item;
+import renderer.Renderable;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -16,11 +18,11 @@ import java.util.List;
 /**
  * Created by mgoo on 22/04/17.
  */
-public class Menu {
+public abstract class Menu implements Renderable {
     private int x = 0,y =0, width, height;
     private List<Item> items = new ArrayList<>();
     private List<InteractableItem> interactableItems = new ArrayList<>();
-    private Image background;
+    private BufferedImage background;
 
     public Menu(int x, int y, int width, int height){
         this.x = x;
@@ -34,8 +36,6 @@ public class Menu {
     public void setWidth(int width){this.width = width;}
     public void setHeight(int height){this.height = height;}
 
-    public int getX(){return this.x;}
-    public int getY(){return this.y;}
     public int getWidth(){return this.width;}
     public int getHeight(){return this.height;}
 
@@ -48,10 +48,35 @@ public class Menu {
     }
     public List<InteractableItem> getInteractableItems(){return this.interactableItems;}
 
-    public void render(Graphics g){
-        g.drawImage(this.background, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+    @Override
+    public Image getSprite(){
+        Image img = this.background.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
+        BufferedImage image = new BufferedImage(img.getWidth(null), img.getWidth(null), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D img_graphics = image.createGraphics();
+        img_graphics.drawImage(img, 0, 0, null);
         for (Item item : this.items){
-            item.render(g);
+            img_graphics.drawImage(item.getImage(), item.getX(), item.getY(), item.getWidth(), item.getHeight(), null);
         }
+        return image;
+    }
+
+    @Override
+    public double getRotation(){
+        return Math.PI;
+    }
+
+    @Override
+    public double getX(){
+        return this.x;
+    }
+
+    @Override
+    public double getY(){
+        return this.y;
+    }
+
+    @Override
+    public void setSprite(Image sprite){
+        throw new RuntimeException("THIS IS NOT SUPPORTED");
     }
 }

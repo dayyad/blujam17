@@ -29,6 +29,5 @@ public abstract class Item {
     public int getWidth(){return this.width;}
     public int getHeight(){return this.height;}
 
-
-    public abstract void render(Graphics g);
+    public abstract Image getImage();
 }

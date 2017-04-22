@@ -34,7 +34,7 @@ public class Main extends Subject {
 	private SoundManager soundManager = new SoundManager();
 
 	private Input input = new Input(this.physics);
-	private InputHandler menuInput = new InputHandler();
+	private InputHandler menuInput = new InputHandler(this.renderer);
 
 	private UserActions inputWrapper = new UserActions();
 
@@ -100,6 +100,7 @@ public class Main extends Subject {
 	public void start(){
 		Globals.gameState = Globals.GameState.IN_GAME;
 		Globals.inputHandler = this.input;
+		Globals.CurrentMenu = null;
 		try {
 			Stage entity = new Stage(ImageIO.read(new File("assets/Maps/map_0.jpg")), null);
 

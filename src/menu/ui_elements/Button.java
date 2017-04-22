@@ -71,32 +71,33 @@ public class Button extends InteractableItem {
     public void setPressedImg(Image pressed){this.pressed = pressed;}
 
     @Override
-    public void render(Graphics g) {
+    public Image getImage() {
         switch(this.state){
             case NORMAL:
                 if (this.normal != null){
-                    g.drawImage(this.normal, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+                    return this.normal;
                 }
                 break;
             case HOVER:
                 if (this.hover == null){
                     if (this.normal != null){
-                        g.drawImage(this.normal, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+                         return this.normal;
                     }
                 } else {
-                    g.drawImage(this.hover, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+                    return this.hover;
                 }
                 break;
             case PRESSED:
                 if (this.hover == null){
                     if (this.normal != null){
-                        g.drawImage(this.normal, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+                        return this.normal;
                     }
                 } else {
-                    g.drawImage(this.pressed, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
+                    return this.pressed;
                 }
                 break;
         }
+        return null;
     }
 
 
