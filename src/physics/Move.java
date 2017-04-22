@@ -8,11 +8,6 @@ import world.Entity;
 public class Move extends Command{
 	private final double deltaX, deltaY;
 
-	public Move(double deltaX, double deltaY){
-		this.deltaX = deltaX;
-		this.deltaY = deltaY;
-	}
-
 	public Move(Entity entity, double deltaX, double deltaY){
 		this.setActor(entity);
 		this.deltaX = deltaX;
