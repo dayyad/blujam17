@@ -4,8 +4,8 @@ import java.util.Collection;
 
 public interface Animatable {
 	
-	Animator getAnimator();
 	Collection<Image> getFrames();
+	void setFrames(Collection<Image> frames);
 	
 	/**
 	 * boolean isVisibile();

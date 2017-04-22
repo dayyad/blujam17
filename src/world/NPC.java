@@ -1,8 +1,14 @@
 package world;
 
-public class NPC extends Entity {
+import java.awt.Color;
+import java.awt.Image;
+import java.util.Collection;
+
+public class NPC extends Entity implements world.movement.Collidable, Animatable {
 
 	// Do move that auto sets facing angle.
+	Collection<Image> frames;
+	Color[][] collisionMap;
 
 	@Override
 	public void move(double deltaX, double deltaY) {
@@ -38,4 +44,26 @@ public class NPC extends Entity {
 		this.x += deltaX;
 		this.y += deltaY;
 	}
+	
+	@Override
+	public void setFrames(Collection<Image> frames){
+		this.frames = frames;
+	}
+
+	@Override
+	public Collection<Image> getFrames() {
+		return this.frames;
+	}
+
+	@Override
+	public Color[][] getCollisionMap() {
+		return this.collisionMap;
+	}
+
+	@Override
+	public void setCollisionMap(Color[][] map) {
+		this.collisionMap = map;
+	}
+
+	
 }

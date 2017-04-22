@@ -29,8 +29,13 @@ public abstract class Entity {
 	 * @return
 	 */
 	
+	//Spin entity to face coordinate
 	public void pointTo(double x, double y){
 		//TODO
+	}
+	
+	public void setRotation(double rotation){
+		this.rotation = rotation;
 	}
 
 	public Entity(boolean isNPC) {
@@ -43,6 +48,10 @@ public abstract class Entity {
 
 	public void setMovementSpeed(double speed) {
 		this.movementSpeed = speed;
+	}
+	
+	public double getMovementSpeed(){
+		return this.movementSpeed;
 	}
 
 	public void setX(double x) {

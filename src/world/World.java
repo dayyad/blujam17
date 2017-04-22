@@ -21,22 +21,77 @@ public class World extends Subject implements Observerable {
 	private Set<Entity> entities = new HashSet<>();
 
 	/**
-	 *  Used to further sub classify entities.
-	 *  
-	 *  KEY:
-	 *  Collidable, Renderable, Animatable, NPC
-	 *  
+	 * Used to further sub classify entities.
+	 * 
+	 * KEY: Collidable, Renderable, Animatable, NPC
+	 * 
 	 */
 
 	private Map<String, Set<Entity>> entityMap = new HashMap<>();
+	// Map fields
+	private Level currentLevel;
 
-	//Map fields
-	
-	
-	
-	
 	public World() {
 		super();
+		// creates empty lists for all entity interfaces
+		initEntityMap();
+	}
+
+	private void initEntityMap() {
+		entityMap.put("Collidable", new HashSet<Entity>());
+		entityMap.put("Renderable", new HashSet<Entity>());
+		entityMap.put("Animatable", new HashSet<Entity>());
+		entityMap.put("NPC", new HashSet<Entity>());
+		entityMap.put("Player", new HashSet<Entity>());
+		entityMap.put("Stage", new HashSet<Entity>());
+	}
+
+	// Filters new entities into their relevant places.
+	public void addEntity(Entity entity) {
+
+		if (entity instanceof Player) {
+			entityMap.get("Player").add(entity);
+		}
+
+		if (entity instanceof Stage) {
+			entityMap.get("Stage").add(entity);
+		}
+
+		if (entity instanceof NPC) {
+			entityMap.get("NPC").add(entity);
+		}
+
+		if (entity instanceof Renderable) {
+			entityMap.get("Renderable").add(entity);
+		}
+
+		if (entity instanceof Animatable) {
+			entityMap.get("Animatable").add(entity);
+		}
+
+		if (entity instanceof world.movement.Collidable) {
+			entityMap.get("Collidable").add(entity);
+		}
+
+		entities.add(entity);
+	}
+
+	public Collection<Entity> getEntitiesWithType(String type) {
+		Set<Entity> returnEnts = new HashSet<>();
+		returnEnts.addAll(entityMap.get(type));
+		if(currentLevel != null){returnEnts.addAll(currentLevel.getEntitiesWithType(type));}
+		return returnEnts;
+	}
+
+	public void removeEntity(Entity entity) {
+		entities.remove(entity);
+
+		for (Collection<Entity> col : entityMap.values()) {
+			col.remove(entity);
+		}
+		if (currentLevel != null) {
+			currentLevel.removeEntity(entity);
+		}
 	}
 
 	public boolean hasEntity(Entity lookup) {
@@ -49,78 +104,16 @@ public class World extends Subject implements Observerable {
 	}
 
 	/**
-	 * called whenever adding new entity of this type to world.
-	 * 
-	 * checks if entity is present in other data structures and adds to them if
-	 * not.
-	 *
-	 */
-	
-	public void addCollidableEntity(Entity e) {
-		entities.add(e);
-		entityMap.get("Collidable").add(e);
-	}
-	
-	public void addRenderableEntity(Entity e){
-		entities.add(e);
-		entityMap.computeIfAbsent("Renderable", (key) -> entityMap.put(key, new HashSet<>()));
-		entityMap.get("Renderable").add(e);
-	}
-
-	/**
-	 * @return gets entities that implement collidable
-	 */
-
-	public Collection<Entity> getCollidableEntities() {
-		List<Entity> returnList = new ArrayList<>();
-
-		for (Entity e : this.entities) {
-			if (e instanceof world.movement.Collidable) {
-				returnList.add(e);
-			}
-		}
-
-		return returnList;
-	}
-
-	/**
-	 * @return gets entities that implement renderable
-	 */
-	public Collection<Entity> getRenderableEntities() {
-		return entityMap.get("Renderable");
-	}
-
-	public Collection<Entity> getNPCS() {
-		List<Entity> returnList = new ArrayList<>();
-
-		for (Entity e : this.entities) {
-			if (e instanceof world.NPC) {
-				returnList.add(e);
-			}
-		}
-
-		return returnList;
-	}
-
-	/**
-	 * @return gets players entity
-	 */
-	public Entity getPlayerEntity() {
-		// return this.player.getEntity();
-		return null;
-	}
-
-	/**
 	 * Gets the collision map for the currently loaded map
 	 * 
 	 * @return
 	 */
-	public Color[][] getCollisionMap() {
+	public Color[][] getStageCollisionMap() {
 		return null;
 	}
 
 	public Collection<Entity> getEntities() {
-		return null;
+		return this.entities;
 	}
 
 	@Override

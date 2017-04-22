@@ -4,7 +4,7 @@ import java.awt.Image;
 
 public interface Renderable {
 
-	boolean isVisible();
+	void setSprite(Image sprite);
 	Image getSprite();
 	
 }

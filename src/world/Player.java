@@ -12,17 +12,20 @@ public class Player extends Entity implements Collidable, Animatable{
 	//Animatable
 	boolean isVisible;
 	int currentFrame;
+	Animator animator;
+	Collider collider;
+	Collection<Image> frames;
+	Color[][] collisionMap;
 
-	public Player(){
-
+	public Player(double x, double y, Image sprite, Collider collider){
+		this.rotation = 0;
+		this.x = x;
+		this.y = y;
+		this.collider = collider;
 	}
 	
-	//Collidable
-	Collection<Image> frames;
-
-	@Override
-	public Animator getAnimator() {
-		return null;
+	public void setFrames(Collection<Image> frames){
+		this.frames = frames;
 	}
 
 	@Override
@@ -31,7 +34,13 @@ public class Player extends Entity implements Collidable, Animatable{
 	}
 
 	@Override
-	public Collider getCollider() {
-		return null;
+	public Color[][] getCollisionMap() {
+		return this.collisionMap;
 	}
+
+	@Override
+	public void setCollisionMap(Color[][] map) {
+		this.collisionMap = map;
+	}
+
 }

@@ -14,9 +14,10 @@ import world.*;
 
 public class Loader {
 
-	public static Stage loadStage(URL url){
+	public static Level loadLevel(String number){
+		Level stagedLevel = new Level();
 		
-		return null;
+		return stagedLevel;
 	}
 	
 	
