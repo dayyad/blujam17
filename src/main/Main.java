@@ -1,60 +1,92 @@
 package main;
+
 import ai.AI;
 import ecs100.UI;
-import events.Events;
+import events.*;
 import input.Input;
 import menu.InputHandler;
 import menu.MainMenu;
 import physics.Physics;
 import renderer.Renderer;
+import sound.SoundManager;
+import world.NPC;
+import world.Player;
+import world.Stage;
 import world.World;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.peer.ComponentPeer;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Main extends Subject {
 	private static final long TICK_SPEED = 15;
 
-
-	private World world = new World();
+	public World world = new World();
 	private Physics physics = new Physics(this.world);
 	private AI ai = new AI(this.world, this.physics);
-	private Input input = new Input(this.physics);
 	private Renderer renderer = new Renderer(this.world);
+	private SoundManager soundManager = new SoundManager();
 
+	private Input input = new Input(this.physics);
 	private InputHandler menuInput = new InputHandler();
+
 	private UserActions inputWrapper = new UserActions();
+
+	private JFrame frame;
 
 	public Main(){
 		super();
 
-		JFrame frame = UI.getFrame();
-		frame.setVisible(false);
-		frame.dispose();
+		this.addObservers(this.physics);
+		this.addObservers(this.world);
+		this.addObservers(this.ai);
+		this.addObservers(this.renderer);
+		this.addObservers(this.input);
 
-		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		frame.setUndecorated(true);
+		this.physics.addObservers(this.soundManager);
+		this.ai.addObservers(this.physics);
+		this.world.addObservers(this.soundManager);
 
-		GraphicsDevice device = frame.getGraphicsConfiguration().getDevice();
+		this.world.addObservers(this.input);
+		this.world.addObservers(this.ai);
+
+
+		//this.soundManager.update(Events.newLoadEvent());
+
+		this.frame = UI.getFrame();
+		this.frame.setVisible(false);
+		this.frame.dispose();
+
+		this.frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		this.frame.setUndecorated(true);
+
+		GraphicsDevice device = this.frame.getGraphicsConfiguration().getDevice();
 		boolean result = device.isFullScreenSupported();
 		if (result){
-			device.setFullScreenWindow(frame);
+			device.setFullScreenWindow(this.frame);
 		}
 
-		frame.setVisible(true);
+		this.frame.setVisible(true);
 		JComponent canvas = ((JComponent)UI.theUI.canvas);
 		UI.setDivider(0);
 
 		Globals.mainCanvas = canvas;
-		Globals.CurrentMenu = new MainMenu(this, frame.getWidth(), frame.getHeight());
+		Globals.CurrentMenu = new MainMenu(this, this.frame.getWidth(), this.frame.getHeight());
 		Globals.inputHandler = this.menuInput;
 		canvas.addKeyListener(inputWrapper);
 		canvas.addMouseListener(inputWrapper);
+		canvas.addMouseMotionListener(inputWrapper);
+
+	}
+
+	public void quit(){
+		this.frame.dispatchEvent(new WindowEvent(this.frame, WindowEvent.WINDOW_CLOSING));
 	}
 
 	public static void main(String[] args) {
@@ -63,21 +95,45 @@ public class Main extends Subject {
 
 	@Override
 	protected void initObservers() {
-		this.addObservers(this.physics);
-		this.addObservers(this.world);
-		this.addObservers(this.ai);
-		this.addObservers(this.renderer);
 	}
 
 	public void start(){
 		Globals.gameState = Globals.GameState.IN_GAME;
 		Globals.inputHandler = this.input;
+		try {
+			Stage entity = new Stage(ImageIO.read(new File("assets/Maps/map_0.jpg")), null);
+
+			NPC npc = new NPC();
+			npc.setFrames(new ArrayList<Image>() {
+				{
+					this.add(ImageIO.read(new File("assets/Animations/Walk/mob_2_walk_1.png")));
+					this.add(ImageIO.read(new File("assets/Animations/Walk/mob_2_walk_1.png")));
+					this.add(ImageIO.read(new File("assets/mobs/mob_2.png")));
+				}
+			});
+			npc.move(500, 500);
+			npc.setMovementSpeed(2);
+			Player player = new Player(300, 300, null, null);
+			player.setFrames(new ArrayList<Image>() {
+				{
+					this.add(ImageIO.read(new File("assets/Animations/Walk/human_walk_1.png")));
+					this.add(ImageIO.read(new File("assets/Animations/Walk/human_walk_2.png")));
+					this.add(ImageIO.read(new File("assets/mobs/human.png")));
+				}
+			});
+			this.world.addEntity(entity);
+			this.world.addEntity(npc);
+			this.world.addEntity(player);
+			this.world.notifyObservers(Events.newLoadEvent(this.world));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		TimerTask tickTask = new TimerTask() {
 			@Override
 			public void run() {
 				if (Globals.gameState == Globals.GameState.IN_GAME) {
-					Main.this.notify(Events.newEvent(Events.EventType.TICK));
+					Main.this.notifyObservers(Events.newTickEvent());
 				}
 			}
 		};
