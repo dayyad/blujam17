@@ -1,8 +1,10 @@
 package world.loader;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.awt.image.ImageProducer;
+import java.awt.image.Raster;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -75,12 +77,14 @@ public class Loader {
                         newEntity.setX(x);
                         newEntity.setY(y);
                         ((NPC) newEntity).setFrames(animationMap.get("NPC"));
+                        ((NPC) newEntity).setCollisionMap(collisionMap.get("NPC"));
                         break;
                     case "Player":
                         x = Double.parseDouble(fieldMap.get("positionX"));
                         y = Double.parseDouble(fieldMap.get("positionY"));
                         newEntity = new Player(x, y);
                         ((Player) newEntity).setFrames(animationMap.get("Player"));
+                        ((Player) newEntity).setCollisionMap(collisionMap.get("Player"));
                         break;
                 }
                 newLevel.addEntity(newEntity);
@@ -131,7 +135,18 @@ public class Loader {
 
                 } else if (type.equals("Collidable")){
                     Image img = ImageIO.read(new File(chunk[2].split(":")[1]));
-
+                    BufferedImage bimg = (BufferedImage) img;
+                    Raster raster = bimg.getData();
+                    Color[][] collision = new Color[raster.getWidth()][raster.getHeight()];
+                    for(int x = 0; x < raster.getWidth(); x++){
+                        for(int y = 0; y < raster.getHeight(); y++){
+                            int[] m = new int[3];
+                            int[] rgb = raster.getPixel(x, y, m);
+                            Color color = new Color(rgb[0], rgb[1], rgb[2]);
+                            collision[x][y] = color;
+                        }
+                    }
+                    collisionMap.put("entityType", collision);
                 }
             }
 
