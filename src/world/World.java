@@ -63,6 +63,7 @@ public class World extends Subject implements Observerable {
 	
 	public void addRenderableEntity(Entity e){
 		entities.add(e);
+		entityMap.computeIfAbsent("Renderable", (key) -> entityMap.put(key, new HashSet<>()));
 		entityMap.get("Renderable").add(e);
 	}
 

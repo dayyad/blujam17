@@ -1,13 +1,18 @@
 package world;
 
 import java.awt.Image;
+import java.util.Collection;
 
 import world.movement.Collidable;
 import world.movement.Collider;
 
-public class Stage implements Animatable, Collidable, Renderable {
+public class Stage extends Entity implements Animatable, Collidable, Renderable {
 	boolean isVisible = false;
 	Image sprite;
+
+	public Stage(Image sprite){
+		this.sprite = sprite;
+	}
 	
 	@Override
 	public boolean isVisible() {
@@ -16,7 +21,7 @@ public class Stage implements Animatable, Collidable, Renderable {
 
 	@Override
 	public Image getSprite() {
-		return null;
+		return this.sprite;
 	}
 
 	@Override
@@ -26,6 +31,11 @@ public class Stage implements Animatable, Collidable, Renderable {
 
 	@Override
 	public Animator getAnimator() {
+		return null;
+	}
+
+	@Override
+	public Collection<Image> getFrames() {
 		return null;
 	}
 
