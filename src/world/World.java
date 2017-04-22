@@ -13,6 +13,7 @@ import java.util.Set;
 import events.Event;
 import main.Observerable;
 import main.Subject;
+import renderer.Renderable;
 
 public class World extends Subject implements Observerable {
 	// private Player player;

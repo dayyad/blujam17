@@ -2,6 +2,9 @@ package world;
 
 import java.util.Collection;
 import java.util.HashMap;
+
+import renderer.Renderable;
+
 import java.util.*;
 
 public class Level {

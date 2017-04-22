@@ -10,13 +10,9 @@ import events.Events;
 import main.*;
 import physics.Move;
 import physics.Physics;
-import world.Entity;
 import world.World;
 
 public class Input extends UserActions implements Observerable{
-	private static final int MOUSE_MOVE = 0;
-	private static final int MOUSE_CLICK = 1;
-
 	private Subject subject;
 	private Map<Integer, Boolean> keyPressedMap = new HashMap<>();
 	private Map<Integer, Command> keyBindings = new HashMap<>();
@@ -27,8 +23,6 @@ public class Input extends UserActions implements Observerable{
 		keyBindings.put(KeyEvent.VK_A, new Move(-2.5, 0));
 		keyBindings.put(KeyEvent.VK_S, new Move( 0, 2.5));
 		keyBindings.put(KeyEvent.VK_D, new Move( 2.5, 0));
-
-		keyBindings.put(MOUSE_MOVE, new Rotate());
 
 		this.subject = new Subject() {
 			@Override
@@ -83,10 +77,7 @@ public class Input extends UserActions implements Observerable{
 
 	@Override
 	public void mouseMoved(MouseEvent e){
-		Rotate rotateCommand = (Rotate)this.keyBindings.get(MOUSE_MOVE);
-		rotateCommand.setX(e.getX());
-		rotateCommand.setY(e.getY());
-		rotateCommand.execute();
+
 	}
 
 	@Override
@@ -105,9 +96,8 @@ public class Input extends UserActions implements Observerable{
 				}
 				break;
 			case LOAD:
-				Entity player = ((World)event.getContext()).getEntitiesWithType("Player").iterator().next();
 				this.keyBindings.values().stream().forEach((value) -> {
-					value.setActor(player);
+					value.setActor(((World)event.getContext()).getEntitiesWithType("Player").iterator().next());
 				});
 				break;
 		}

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Image;
 import java.util.Collection;
 
+import renderer.Renderable;
 import world.movement.Collidable;
 import world.movement.Collider;
 

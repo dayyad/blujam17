@@ -14,15 +14,13 @@ public class Player extends Entity implements Collidable, Animatable{
 	boolean isVisible;
 	int currentFrame;
 	Animator animator;
-	Collider collider;
 	Color[][] collisionMap;
 
-	public Player(double x, double y, Image sprite, Collider collider){
+	public Player(double x, double y, Image sprite){
 		this.animator = new Animator();
 		this.rotation = 0;
 		this.x = x;
 		this.y = y;
-		this.collider = collider;
 	}
 
 	@Override
