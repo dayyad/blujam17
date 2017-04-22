@@ -31,7 +31,7 @@ public class NPC extends Entity implements world.movement.Collidable, Animatable
 			padding = Math.PI/2;
 			adj = deltaX;
 			opp = deltaY;
-		} else if (deltaX <0 && deltaY < 0){
+		} else if (deltaX <0 && deltaY > 0){
 			//bot left
 			padding = Math.PI;
 			adj = deltaY;
