@@ -19,8 +19,6 @@ public class Renderer implements Observerable {
 	
 
 	public Renderer(World world) {
-		this.offScreen = new BufferedImage(Globals.mainCanvas.getWidth(), Globals.mainCanvas.getHeight(),
-				BufferedImage.TYPE_INT_ARGB);
 		this.world = world;
 	}
 
@@ -34,6 +32,8 @@ public class Renderer implements Observerable {
 	}
 
 	private void render() {
+		this.offScreen = new BufferedImage(Globals.mainCanvas.getWidth(), Globals.mainCanvas.getHeight(),
+				BufferedImage.TYPE_INT_ARGB);
 		// Render world
 
 		for (world.Entity entity : world.getRenderableEntities()) {
@@ -48,17 +48,8 @@ public class Renderer implements Observerable {
 	}
 
 	private void drawToOffScreen(Image sprite, double x, double y, double rotation) {
-		// TODO make it draw according to its rotation.
-
-		AffineTransform af = AffineTransform.getRotateInstance(Math.PI);
-		BufferedImage bi = new BufferedImage(30, 30, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = bi.createGraphics();
-		g2d.setTransform(af);
-		g2d.drawImage(bi, null, 0, 0);
-		g2d.dispose();
-
-		// TODO make maybe nicer
-		Graphics2D g2 = offScreen.createGraphics();
-		g2.drawImage(bi, (int)x, (int) y, null);
+		AffineTransform af = AffineTransform.getRotateInstance(rotation);
+		af.translate(x, y);
+		this.offScreen.createGraphics().drawImage(sprite, af, null);
 	}
 }
