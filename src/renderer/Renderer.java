@@ -23,9 +23,12 @@ public class Renderer implements Observerable {
 	@Override
 	public void update(Event e) {
 		switch (e.getType()) {
-		case TICK:
-			this.render();
-			break;
+			case TICK:
+				this.render();
+				break;
+			case MENU_UPDATE:
+				this.render();
+				break;
 		}
 	}
 
@@ -33,8 +36,7 @@ public class Renderer implements Observerable {
 		this.offScreen = new BufferedImage(Globals.mainCanvas.getWidth(), Globals.mainCanvas.getHeight(),
 				BufferedImage.TYPE_INT_ARGB);
 		// Render world
-		
-		if (world != null) {
+
 			for (world.Entity entity : world.getEntitiesWithType("Renderable")) {
 				drawToOffScreen(((Renderable) entity).getSprite(), entity.getX(), entity.getY(), entity.getRotation());
 			}
@@ -43,7 +45,10 @@ public class Renderer implements Observerable {
 				drawToOffScreen(((world.Animatable) entity).getAnimator().nextFrame(), entity.getX(), entity.getY(),
 						entity.getRotation());
 			}
-		}
+			if (Globals.CurrentMenu != null){
+				drawToOffScreen(Globals.CurrentMenu.getSprite(), Globals.CurrentMenu.getX(), Globals.CurrentMenu.getY(), 0);
+			}
+
 
 		// Swapping current graphics to be off screen image.
 		Globals.mainCanvas.getGraphics().drawImage(offScreen, 0, 0, null);
