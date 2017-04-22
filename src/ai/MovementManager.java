@@ -40,13 +40,15 @@ public class MovementManager {
         double hyp = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
         double xMove = (entity.getMovementSpeed()/hyp) * xDiff;
         double yMove = (entity.getMovementSpeed()/hyp) * yDiff;
+        System.out.println("{ "+xMove+" , " + yMove+" }");
         return new double[]{xMove, yMove};
     }
 
     private double[] getWalkingMovement(Entity entity){
         double xMovement = (Math.random() * entity.getMovementSpeed());
         double yMovement = Math.sqrt(Math.pow(entity.getMovementSpeed(), 2) - Math.pow(xMovement, 2));
-        return new double[]{xMovement, yMovement};
+        //return new double[]{xMovement - (xMovement/2), yMovement - (yMovement/2)};
+        return new double[]{1,1};
     }
 
     private void updateState(Entity entity){
