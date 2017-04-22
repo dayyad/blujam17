@@ -3,8 +3,9 @@ import java.awt.Image;
 import java.util.*;
 
 public class Animator {
-	
+	int hzElapsed = 0;
 	int currentFrame = 0;
+	int interval = 30; //In frames
 	List<Image> frames = new ArrayList<>();
 
 	/**
@@ -20,13 +21,31 @@ public class Animator {
 	}
 	
 	public Image nextFrame(){
-		Image returnImage = frames.get(currentFrame % frames.size());
-		currentFrame++;
-		return returnImage;
+		hzElapsed ++;
+		if(hzElapsed > interval){
+			 hzElapsed = 0;
+			Image returnImage = frames.get(currentFrame % frames.size());
+			currentFrame++;
+			
+			//Stops nonstop increasing
+			if(currentFrame % frames.size() == 0){
+				currentFrame = 0;
+			}
+			return returnImage;
+		}
+		return frames.get(currentFrame % frames.size());
 	}
 	
 	public void addFrames(List<Image> frames){
 		this.frames = frames;
+	}
+	
+	/**
+	 * 
+	 * @param hz to wait before changing frame.
+	 */
+	public void setInterval(int hz){
+		this.interval = hz;
 	}
 
 	public List<Image> getFrames(){
