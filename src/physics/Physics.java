@@ -3,11 +3,12 @@ package physics;
 import events.Event;
 import events.Events;
 import main.Observerable;
+import main.Subject;
 import world.Entity;
 import world.World;
 import world.movement.Collidable;
 
-public class Physics implements Observerable {
+public class Physics extends Subject implements Observerable {
 	private final World world;
 	private final CollisionManager collisionManager = new CollisionManager();
 
@@ -35,17 +36,22 @@ public class Physics implements Observerable {
 	}
 
 	private boolean validateMove(Move move) {
-		Entity entity = move.getEntity();
+		Entity entity = move.getActor();
 		double newX = entity.getX() + move.getDeltaX();
 		double newY = entity.getY() + move.getDeltaY();
-		if (!(move.getEntity() instanceof Collidable))return true;
+		if (!(move.getActor() instanceof Collidable))return true;
 
-		for(Entity otherEntity : this.world.getEntities()){
-			if (this.collisionManager.checkCollisionMap(newX, newY, ((Collidable)entity).getCollider().getCollisionMap(), otherEntity)){
-				this.notify(Events.newCollisionEvent(entity, otherEntity));
+		for(Entity otherEntity : this.world.getEntitiesWithType("Collidable")){
+			if (this.collisionManager.checkCollisionMap(newX, newY, ((Collidable)entity).getCollisionMap(), otherEntity)){
+				this.notifyObservers(Events.newCollisionEvent(entity, otherEntity));
 				return false;
 			}
 		}
 		return true;
+	}
+
+	@Override
+	protected void initObservers() {
+
 	}
 }

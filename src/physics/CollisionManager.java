@@ -17,7 +17,7 @@ public class CollisionManager {
 
     boolean checkCollisionMap(double x1, double y1, Color[][] collisionMap1, Entity otherEntity){
         if (!(otherEntity instanceof Collidable))return false;
-        return this.checkCollisionMap(x1, y1, collisionMap1, otherEntity.getX(), otherEntity.getY(), ((Collidable)otherEntity).getCollider().getCollisionMap);
+        return this.checkCollisionMap(x1, y1, collisionMap1, otherEntity.getX(), otherEntity.getY(), ((Collidable)otherEntity).getCollisionMap());
     }
 
     boolean checkCollisionMap(double x1, double y1, Color[][] collisionMap1, double x2, double y2, Color[][] collisionMap2){

@@ -7,21 +7,24 @@ import world.Entity;
 
 public class Move extends Command{
 	private final double deltaX, deltaY;
-	private final Entity entity;
-	
+
+	public Move(double deltaX, double deltaY){
+		this.deltaX = deltaX;
+		this.deltaY = deltaY;
+	}
+
 	public Move(Entity entity, double deltaX, double deltaY){
-		this.entity = entity;
+		this.setActor(entity);
 		this.deltaX = deltaX;
 		this.deltaY = deltaY;
 	}
 
 	public double getDeltaX(){return this.deltaX;}
 	public double getDeltaY(){return this.deltaY;}
-	public Entity getEntity(){return this.entity;}
 
 	@Override
 	public void execute() {
-		this.entity.setX(entity.getX() + this.getDeltaX());
-		this.entity.setY(entity.getY() + this.getDeltaY());
+		assert this.getActor() != null : "Calling move on a null entity";
+		this.getActor().move(deltaX, deltaY);
 	}
 }
