@@ -19,6 +19,7 @@ public abstract class Subject {
 	
 	public void notify(Event event){
 		for (Observerable observer : this.observers){
+			if (observer == null)continue;
 			observer.update(event);
 		}
 	}

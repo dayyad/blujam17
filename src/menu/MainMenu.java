@@ -1,5 +1,6 @@
 package menu;
 
+import main.Globals;
 import main.Main;
 
 import javax.imageio.ImageIO;
@@ -16,11 +17,12 @@ public class MainMenu extends Menu{
     public MainMenu(Main main, int screenWidth, int screenHeight){
         super(0,0, screenWidth, screenHeight);
         try {
-            Image baseImage = ImageIO.read(new File("assets/Misc/start_button.jpg"));
-            Image hoveImage = ImageIO.read(new File("assets/Misc/end_button.jpg"));
+            Image baseImage = ImageIO.read(new File("assets/Misc/start_2.jpg"));
+            Image hoveImage = ImageIO.read(new File("assets/Misc/end_2.jpg"));
             Image pressedImage = ImageIO.read(new File("assets/Misc/crystal.png"));
             menu.ui_elements.Button startButton = new menu.ui_elements.Button(10,10,50,50, baseImage, hoveImage, pressedImage);
             startButton.setOnClickEvent(main::start);
+
             this.add(startButton);
         } catch (IOException e) {
             e.printStackTrace();
@@ -31,7 +33,7 @@ public class MainMenu extends Menu{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.render();
+        render(Globals.mainCanvas.getGraphics());
     }
 
 }

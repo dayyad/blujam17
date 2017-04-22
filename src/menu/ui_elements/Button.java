@@ -8,6 +8,35 @@ import java.awt.*;
  * Created by mgoo on 22/04/17.
  */
 public class Button extends InteractableItem {
+    @Override
+    public void onClick(int x, int y) {
+        // Unused
+    }
+
+    @Override
+    public void onPress(int x, int y) {
+        if (this.contains(x, y)){
+            this.state = State.PRESSED;
+            this.onClickEvent.click();
+        }
+    }
+
+    @Override
+    public void onRelease(int x, int y) {
+        if (this.contains(x, y)){
+            this.state = State.NORMAL;
+        }
+    }
+
+    @Override
+    public void onMove(int x, int y) {
+        if (this.contains(x, y)){
+            this.state = State.HOVER;
+        } else {
+            this.state = State.NORMAL;
+        }
+    }
+
     public enum State{
         NORMAL, HOVER, PRESSED
     }
@@ -24,40 +53,21 @@ public class Button extends InteractableItem {
     }
 
     @Override
-    public void render() {
+    public void render(Graphics g) {
         switch(this.state){
             case NORMAL:
-                UI.drawImage(this.normal, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+                g.drawImage(this.normal, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
                 break;
             case HOVER:
-                UI.drawImage(this.hover, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+                g.drawImage(this.hover, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
                 break;
             case PRESSED:
-                UI.drawImage(this.pressed, this.getX(), this.getY(), this.getWidth(), this.getHeight());
+                g.drawImage(this.pressed, this.getX(), this.getY(), this.getWidth(), this.getHeight(), null);
                 break;
         }
     }
 
-    public void onAction(String action, double x, double y){
-        System.out.println("Button recived: " + action);
-        switch (action) {
-            case "pressed":
-                if (this.contains((int)x, (int)y)) {
-                    this.state = State.PRESSED;
-                    this.onClickEvent.click();
-                }
-                break;
-            case "moved":
-                if (this.contains((int)x, (int)y)) {
-                    this.state = State.HOVER;
-                    System.out.println("Set hover state");
-                } else {
-                    this.state = State.NORMAL;
-                    System.out.println("Set Normal State");
-                }
-                break;
-        }
-    }
+
 
     public void setOnClickEvent(Click onClickEvent){this.onClickEvent = onClickEvent;}
 

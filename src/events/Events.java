@@ -38,7 +38,7 @@ public class Events {
 		return tempEvent;
 	}
 	
-	public static Event newTickEvent(World context){
-		return new Event(EventType.TICK, context);
+	public static Event newTickEvent(){
+		return new Event(EventType.TICK);
 	}
 }

@@ -34,7 +34,7 @@ public class NPC extends Entity {
 			opp = deltaY;
 		}
 		
-		this.heading = Math.atan(opp/adj) + padding;
+		this.rotation = Math.atan(opp/adj) + padding;
 		this.x += deltaX;
 		this.y += deltaY;
 	}

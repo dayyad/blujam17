@@ -3,9 +3,9 @@ package physics;
 import events.Event;
 import events.Events;
 import main.Observerable;
-import world.Collidable;
 import world.Entity;
 import world.World;
+import world.movement.Collidable;
 
 public class Physics implements Observerable {
 	private final World world;
