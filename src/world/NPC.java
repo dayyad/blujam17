@@ -44,7 +44,6 @@ public class NPC extends Entity implements world.movement.Collidable, Animatable
 		}
 
 		this.rotation = Math.atan(Math.abs(opp)/Math.abs(adj)) + padding + Math.PI;
-		System.out.println(this.rotation);
 		this.x += deltaX;
 		this.y += deltaY;
 	}

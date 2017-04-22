@@ -8,7 +8,7 @@ import world.Entity;
 import world.World;;
 
 public class AI extends Subject implements Observerable{
-	private final MovementManager movementManager;
+	private MovementManager movementManager;
 
 	private final World world;
 	private final Physics physics;
@@ -16,18 +16,21 @@ public class AI extends Subject implements Observerable{
 	public AI (World world, Physics physics){
 		this.world = world;
 		this.physics = physics;
-
-		this.movementManager = new MovementManager(world.getPlayerEntity());
 	}
 	
 	@Override
 	public void update(Event event) {
 		switch (event.getType()){
 			case TICK:
-				for (Entity entity : this.world.getNPCs()){
+				for (Entity entity : this.world.getEntitiesWithType("NPC")){
 					double[] movement = this.movementManager.getMovement(entity);
-					this.notify(Events.newMoveEvent(entity, movement[0], movement[1]));
+					System.out.println("{ " + movement[0] + " , "  + movement[1] + " }");
+					this.notifyObservers(Events.newMoveEvent(entity, movement[0], movement[1]));
 				}
+				break;
+			case LOAD:
+				this.movementManager = new MovementManager(((World)event.getContext()).getEntitiesWithType("Player").iterator().next());
+//				this.movementManager = new MovementManager(null);
 				break;
 		}
 	}

@@ -17,7 +17,7 @@ public abstract class Subject {
 		this.observers.add(observer);
 	}
 	
-	public void notify(Event event){
+	public void notifyObservers(Event event){
 		for (Observerable observer : this.observers){
 			if (observer == null)continue;
 			observer.update(event);
