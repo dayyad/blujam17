@@ -10,13 +10,11 @@ import java.nio.Buffer;
 import events.Event;
 import main.Globals;
 import main.Observerable;
-import world.Renderable;
 import world.World;
 
 public class Renderer implements Observerable {
 	private final World world;
 	private BufferedImage offScreen;
-	
 
 	public Renderer(World world) {
 		this.world = world;
@@ -35,13 +33,16 @@ public class Renderer implements Observerable {
 		this.offScreen = new BufferedImage(Globals.mainCanvas.getWidth(), Globals.mainCanvas.getHeight(),
 				BufferedImage.TYPE_INT_ARGB);
 		// Render world
-
-		for (world.Entity entity : world.getEntitiesWithType("Renderable")) {
-			drawToOffScreen(((Renderable) entity).getSprite(), entity.getX(), entity.getY(), entity.getRotation());
-		}
 		
-		for(world.Entity entity : world.getEntitiesWithType("Animatable")){
-			drawToOffScreen(((world.Animatable)entity).getAnimator().nextFrame(), entity.getX(), entity.getY(), entity.getRotation());
+		if (world != null) {
+			for (world.Entity entity : world.getEntitiesWithType("Renderable")) {
+				drawToOffScreen(((Renderable) entity).getSprite(), entity.getX(), entity.getY(), entity.getRotation());
+			}
+
+			for (world.Entity entity : world.getEntitiesWithType("Animatable")) {
+				drawToOffScreen(((world.Animatable) entity).getAnimator().nextFrame(), entity.getX(), entity.getY(),
+						entity.getRotation());
+			}
 		}
 
 		// Swapping current graphics to be off screen image.
@@ -54,7 +55,7 @@ public class Renderer implements Observerable {
 	private void drawToOffScreen(Image sprite, double x, double y, double rotation) {
 		AffineTransform af = new AffineTransform();
 		af.translate(x, y);
-		af.rotate(rotation, sprite.getWidth(null)/2, sprite.getHeight(null)/2);
+		af.rotate(rotation, sprite.getWidth(null) / 2, sprite.getHeight(null) / 2);
 		this.offScreen.createGraphics().drawImage(sprite, af, null);
 	}
 }
