@@ -5,12 +5,16 @@ import java.util.*;
 public class Animator {
 	
 	int currentFrame = 0;
-	final List<Image> frames = new ArrayList<>();
+	List<Image> frames = new ArrayList<>();
 
 	/**
 	 * Big OG class that deals with animation of all entities
 	 */
 
+	public Animator(){
+		
+	}
+	
 	public Animator(List<Image> frames) {
 		this.frames.addAll(frames); 
 	}
@@ -20,8 +24,12 @@ public class Animator {
 		currentFrame++;
 		return returnImage;
 	}
+	
+	public void addFrames(List<Image> frames){
+		this.frames = frames;
+	}
 
-	public Collection<Image> getFrames(){
+	public List<Image> getFrames(){
 		return this.frames;
 	}
 }

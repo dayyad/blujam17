@@ -36,8 +36,12 @@ public class Renderer implements Observerable {
 				BufferedImage.TYPE_INT_ARGB);
 		// Render world
 
-		for (world.Entity entity : world.getRenderableEntities()) {
+		for (world.Entity entity : world.getEntitiesWithType("Renderable")) {
 			drawToOffScreen(((Renderable) entity).getSprite(), entity.getX(), entity.getY(), entity.getRotation());
+		}
+		
+		for(world.Entity entity : world.getEntitiesWithType("Animatable")){
+			drawToOffScreen(((world.Animatable)entity).getAnimator().nextFrame(), entity.getX(), entity.getY(), entity.getRotation());
 		}
 
 		// Swapping current graphics to be off screen image.
