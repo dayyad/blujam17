@@ -1,6 +1,9 @@
 package world;
 
 import main.Globals;
+import world.loader.Loader;
+
+import java.awt.*;
 
 /**
  * @author Vo
@@ -107,11 +110,8 @@ public abstract class Entity {
 	/**
 	 * moves entity to given position instead of just adding to its current
 	 * position.
-	 * 
-	 * @param deltaX
-	 * @param deltaY
+
 	 */
-	
 	public void moveTo(double x, double y) {
 		this.x = x;
 		this.y = y;
@@ -127,6 +127,7 @@ public abstract class Entity {
 
 	public Projectile shoot(){
 		Projectile projectile = new Projectile(this.getX(), this.getY(), this.getRotation(), this);
+		projectile.setCollisionMap(Loader.collisionMap.get("bullet"));
 		Globals.world.addEntity(projectile);
 		return projectile;
 	}

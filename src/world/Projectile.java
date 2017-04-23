@@ -16,6 +16,8 @@ import java.io.IOException;
 public class Projectile extends Entity implements Renderable, Collidable {
     public static double PROJECTILE_SPEED = 20;
 
+    Color[][] collisionMap;
+
     BufferedImage sprite;
     Entity owner;
 
@@ -32,6 +34,8 @@ public class Projectile extends Entity implements Renderable, Collidable {
             e.printStackTrace();
         }
     }
+
+    public Entity getOwner(){return this.owner;}
     @Override
     public void setSprite(Image sprite) {
 
@@ -44,12 +48,12 @@ public class Projectile extends Entity implements Renderable, Collidable {
 
     @Override
     public Color[][] getCollisionMap() {
-        return new Color[0][];
+        return this.collisionMap;
     }
 
     @Override
     public void setCollisionMap(Color[][] map) {
-
+        this.collisionMap = map;
     }
 
     public Move getMovement(){

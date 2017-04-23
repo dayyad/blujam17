@@ -8,6 +8,7 @@ import menu.InputHandler;
 import menu.MainMenu;
 import menu.PauseMenu;
 import physics.Physics;
+import renderer.HUD;
 import renderer.Renderer;
 import sound.SoundManager;
 import world.NPC;
@@ -111,43 +112,15 @@ public class Main extends Subject {
 	}
 
 	public void start(){
-		Globals.gameState = Globals.GameState.IN_GAME;
-		Globals.inputHandler = this.input;
-		Globals.CurrentMenu = null;
 
-		/*Loader.loadLevel(this.world, "1");
-		this.world.notifyObservers(Events.newLoadEvent(this.world));*/
 
-		try {
-//			ImageIO.read(new File("assets/Menus/start_button.png"))
-			Stage entity = new Stage(ImageIO.read(new File("assets/Maps/map_0.jpg")), null);
+		this.world.setCurrentLevel(Loader.loadLevel( this.world.level + ""));
+		this.world.notifyObservers(Events.newLoadEvent(this.world));
 
-			NPC npc = new NPC();
-			npc.setFrames(new ArrayList<Image>() {
-				{
-					this.add(ImageIO.read(new File("assets/Animations/Walk/mob_2_walk_1.png")));
-					this.add(ImageIO.read(new File("assets/Animations/Walk/mob_2_walk_1.png")));
-					this.add(ImageIO.read(new File("assets/mobs/mob_2.png")));
-				}
-			});
-			npc.move(500, 500);
-			npc.setMovementSpeed(2);
-			Player player = new Player(300, 300);
-			player.setFrames(new ArrayList<Image>() {
-				{
-					this.add(ImageIO.read(new File("assets/Animations/Walk/human_walk_1.png")));
-					this.add(ImageIO.read(new File("assets/Animations/Walk/human_walk_2.png")));
-					this.add(ImageIO.read(new File("assets/mobs/human.png")));
-				}
-			});
-			player.setMovementSpeed(3);
-			this.world.addEntity(entity);
-			this.world.addEntity(npc);
-			this.world.addEntity(player);
-			this.world.notifyObservers(Events.newLoadEvent(this.world));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        Globals.hud = new HUD((Player)this.world.getEntitiesWithType("Player").iterator().next());
+        Globals.gameState = Globals.GameState.IN_GAME;
+        Globals.inputHandler = this.input;
+        Globals.CurrentMenu = null;
 
 		TimerTask tickTask = new TimerTask() {
 			@Override

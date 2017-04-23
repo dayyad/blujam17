@@ -13,6 +13,7 @@ public class Stage extends Entity implements Collidable, Renderable {
 	Color[][] collisionMap;
 	
 	public Stage(Image background, Color[][] collisionMap){
+		System.out.println(background);
 		this.sprite = background;
 		this.collisionMap = collisionMap;
 	}

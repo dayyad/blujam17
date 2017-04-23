@@ -5,9 +5,8 @@ import events.Events;
 import main.Globals;
 import main.Observerable;
 import main.Subject;
-import world.Entity;
-import world.Projectile;
-import world.World;
+import world.*;
+import world.loader.Loader;
 import world.movement.Collidable;
 
 import java.util.ArrayList;
@@ -29,6 +28,15 @@ public class Physics extends Subject implements Observerable {
 		switch (e.getType()) {
 			case SHOOT:
 				this.projectiles.add(((Entity)e.getContext()).shoot());
+				break;
+			case PHYSICS_BULLET_COLLISION:
+			case PHYSICS_BULLET_ENTITY_COLLISION:
+			case PHYSICS_BULLET_MAP_COLLISION:
+				this.projectiles.remove((Projectile)e.getContext());
+				Globals.world.removeEntity((Projectile)e.getContext());
+				break;
+			case PHYSICS_PLAYER_MOB_COLLISION:
+				((Player)((Entity[])e.getContext())[0]).removeHealth(.5);
 				break;
 			case MOVE:
 				this.move((Move) e.getContext());
@@ -64,8 +72,43 @@ public class Physics extends Subject implements Observerable {
 		if (!(move.getActor() instanceof Collidable))return true;
 
 		for(Entity otherEntity : this.world.getEntitiesWithType("Collidable")){
-			if (this.collisionManager.checkCollisionMap(newX, newY, ((Collidable)entity).getCollisionMap(), otherEntity)){
+			if (move.getActor() == otherEntity)continue;
+			if (move.getActor() instanceof Projectile && ((Projectile)move.getActor()).getOwner() == otherEntity)continue;
+			CollisionManager.CollisionType collisionType = this.collisionManager.checkCollisionMap(newX, newY, ((Collidable)entity).getCollisionMap(), otherEntity);
+			if (collisionType.equals(CollisionManager.CollisionType.NEXT_LEVEL)){
+				this.world.setCurrentLevel(Loader.loadLevel( (++this.world.level) + ""));
+				this.world.notifyObservers(Events.newLoadEvent(this.world));
+			}
+			if (!collisionType.equals(CollisionManager.CollisionType.NO_COLLISION)){
+				if (entity instanceof Projectile){
+					if (otherEntity instanceof Stage){
+						this.notifyObservers(Events.newBulletMapCollision((Projectile)entity));
+					} else if (otherEntity instanceof NPC){
+						this.notifyObservers(Events.newBulletEntityCollision((Projectile)entity));
+						((NPC) otherEntity).die();
+					} else {
+						this.notifyObservers(Events.newBulletEntityCollision((Projectile)entity));
+					}
+				}
+				if (otherEntity instanceof Projectile) {
+					if (entity instanceof Stage) {
+						this.notifyObservers(Events.newBulletMapCollision((Projectile) otherEntity));
+					} else if (entity instanceof NPC){
+						this.notifyObservers(Events.newBulletEntityCollision((Projectile)otherEntity));
+						((NPC) entity).die();
+					} else {
+						this.notifyObservers(Events.newBulletEntityCollision((Projectile)otherEntity));
+					}
+				}
+
+				if (entity instanceof Player && otherEntity instanceof NPC) {
+					this.notifyObservers(Events.newPlayerMobCollision((Player)entity, (NPC)otherEntity));
+				}
+				if (entity instanceof NPC && otherEntity instanceof Player){
+					this.notifyObservers(Events.newPlayerMobCollision((Player)otherEntity, (NPC)entity));
+				}
 				this.notifyObservers(Events.newCollisionEvent(entity, otherEntity));
+
 				return false;
 			}
 		}

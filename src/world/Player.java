@@ -9,13 +9,14 @@ import world.movement.Collidable;
 import world.movement.Collider;
 
 public class Player extends Entity implements Collidable, Animatable{
-	
+
+
 	//Animatable
 	boolean isVisible;
 	int currentFrame;
 	Animator animator;
 	Color[][] collisionMap;
-	double health;
+	double health = 100;
 
 	public Player(double x, double y){
 		this.animator = new Animator();
@@ -25,12 +26,13 @@ public class Player extends Entity implements Collidable, Animatable{
 	}
 	public void removeHealth(double h){
 		this.health -= h;
+		if (health < 0)this.health = 0;
 	}
 
 	public void addHealth(double h){
 		this.health += h;
 	}
-
+	public double getHealth(){return this.health;}
 	@Override
 	public Color[][] getCollisionMap() {
 		return this.collisionMap;

@@ -1,0 +1,7 @@
+type:NPC,positionX:700,positionY:500,health:100,MaxSpeed:1.5,animationName:mob2,collisionName:mob2
+type:NPC,positionX:900,positionY:500,health:100,MaxSpeed:1.5,animationName:mob2,collisionName:mob2
+type:NPC,positionX:400,positionY:500,health:100,MaxSpeed:1.5,animationName:mob2,collisionName:mob2
+type:NPC,positionX:300,positionY:500,health:100,MaxSpeed:1.5,animationName:mob2,collisionName:mob2
+type:NPC,positionX:1000,positionY:50,health:100,MaxSpeed:2.5,animationName:mob1,collisionName:mob1
+type:Player,positionX:50,positionY:600,MaxSpeed:5
+type:Stage,Name:stage3
