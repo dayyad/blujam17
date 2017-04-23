@@ -1,0 +1,11 @@
+Type:Animatable,name:mob1,frame:assets/Animations/Walk/mob_1_walk_1.png,frame:assets/Animations/Walk/mob_1_walk_2.png,frame:assets/mobs/mob_1.png
+Type:Animatable,name:mob2,frame:assets/Animations/Walk/mob_2_walk_1.png,frame:assets/Animations/Walk/mob_2_walk_2.png,frame:assets/mobs/mob_2.png
+Type:Animatable,name:Player,frame:assets/Animations/Walk/player_walk_1.png,frame:assets/Animations/Walk/player_walk_1.png
+Type:Renderable,name:stage1,img:assets/Maps/map_0.jpg
+Type:Collidable,name:stage1,img:assets/Maps/map_0_collisions.png:scale
+Type:Collidable,name:Player,img:assets/Player/player_collision.png
+Type:Collidable,name:mob1,img:assets/mobs/mob_1_collision.png
+Type:Collidable,name:mob2,img:assets/mobs/mob_2_collision.png
+Type:Collidable,name:bullet,img:assets/Particles/bullet_collision.png
+Type:Renderable,name:mob1_dead,img:assets/Animations/dead/mob_1_dead.png
+Type:Renderable,name:mob2_dead,img:assets/Animations/dead/mob_2_dead.png
