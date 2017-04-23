@@ -100,6 +100,8 @@ public class Main extends Subject {
 		this.notifyObservers(Events.newInitialLoadEvent());
 		this.notifyObservers(Events.newMenuUpdate());
 
+		System.out.println(Globals.mainCanvas.getSize().getWidth() + " : " + Globals.mainCanvas.getSize().getHeight());
+
 	}
 
 	public void quit(){

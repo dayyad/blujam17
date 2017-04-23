@@ -67,8 +67,8 @@ public class Player extends Entity implements Collidable, Animatable{
 	@Override
 	public Projectile shoot(){
 		Projectile projectile = super.shoot();
-		projectile.setX(this.getX() + this.getCollisionMap().length/2);
-		projectile.setY(this.getY() + this.getCollisionMap()[0].length/2);
+		/*projectile.setX(this.getX() + this.getCollisionMap().length/2);
+		projectile.setY(this.getY() + this.getCollisionMap()[0].length/2);*/
 		return projectile;
 	}
 

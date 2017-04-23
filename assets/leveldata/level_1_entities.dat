@@ -1,7 +1,7 @@
-type:NPC,positionX:700,positionY:500,health:100,MaxSpeed:1.5,animationName:mob2,collisionName:mob2,DeathSprite:mob2_death
-type:NPC,positionX:900,positionY:500,health:100,MaxSpeed:1.5,animationName:mob2,collisionName:mob2,DeathSprite:mob2_death
-type:NPC,positionX:400,positionY:500,health:100,MaxSpeed:1.5,animationName:mob2,collisionName:mob2,DeathSprite:mob2_death
-type:NPC,positionX:300,positionY:500,health:100,MaxSpeed:1.5,animationName:mob2,collisionName:mob2,DeathSprite:mob2_death
+type:NPC,positionX:355,positionY:355,health:100,MaxSpeed:1.5,animationName:mob2,collisionName:mob2,DeathSprite:mob2_death
+type:NPC,positionX:555,positionY:450,health:100,MaxSpeed:1.5,animationName:mob2,collisionName:mob2,DeathSprite:mob2_death
+type:NPC,positionX:1400,positionY:400,health:100,MaxSpeed:1.5,animationName:mob2,collisionName:mob2,DeathSprite:mob2_death
+type:NPC,positionX:950,positionY:500,health:100,MaxSpeed:2.5,animationName:mob1,collisionName:mob2,DeathSprite:mob1_death
 type:NPC,positionX:1000,positionY:50,health:100,MaxSpeed:2.5,animationName:mob1,collisionName:mob1,DeathSprite:mob1_death
 type:Player,positionX:50,positionY:40,MaxSpeed:5
 type:Stage,Name:stage1
