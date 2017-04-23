@@ -36,8 +36,8 @@ public class Loader {
      * @return
      */
 
-    public static Level loadLevel(World world, String number) {
-        File entityFile = new File("level_" + number + "_entities.txt");
+    public static Level loadLevel(String number) {
+        File entityFile = new File("assets/leveldata/level_" + number + "_entities.dat");
         Level newLevel = new Level();
 
         Map<String, Image> spriteMap = new HashMap<>();
@@ -57,7 +57,7 @@ public class Loader {
 
                 // Decideds what class its going to try to build dependant on
                 // the type
-                type = tokens[0].split(":")[0];
+                type = tokens[0].split(":")[1];
 
                 Map<String, String> fieldMap = new HashMap<>();
 
@@ -73,16 +73,23 @@ public class Loader {
                     case "NPC":
                         double x = Double.parseDouble(fieldMap.get("positionX"));
                         double y = Double.parseDouble(fieldMap.get("positionY"));
+
                         newEntity = new NPC();
+                        newEntity.setMovementSpeed(Double.parseDouble(fieldMap.get("MaxSpeed")));
                         newEntity.setX(x);
                         newEntity.setY(y);
-                        ((NPC) newEntity).setFrames(animationMap.get("NPC"));
-                        ((NPC) newEntity).setCollisionMap(collisionMap.get("NPC"));
+                        ((NPC) newEntity).setFrames(animationMap.get(fieldMap.get("animationName")));
+                        ((NPC) newEntity).setCollisionMap(collisionMap.get(fieldMap.get("collisionName")));
+                        break;
+                    case "Stage":
+                        String name = fieldMap.get("Name");
+                        newEntity = new Stage(spriteMap.get(name), collisionMap.get(name));
                         break;
                     case "Player":
                         x = Double.parseDouble(fieldMap.get("positionX"));
                         y = Double.parseDouble(fieldMap.get("positionY"));
-//                        newEntity = new Player(x, y);
+                        newEntity = new Player(x, y);
+                        newEntity.setMovementSpeed(Double.parseDouble(fieldMap.get("MaxSpeed")));
                         ((Player) newEntity).setFrames(animationMap.get("Player"));
                         ((Player) newEntity).setCollisionMap(collisionMap.get("Player"));
                         break;
@@ -95,8 +102,7 @@ public class Loader {
 
         }
 
-        Level stagedLevel = new Level();
-        return stagedLevel;
+        return newLevel;
     }
 
     /**
@@ -110,8 +116,7 @@ public class Loader {
      */
 
     private static void loadAssets(String map, Map<String, Image> spriteMap, Map<String, List<Image>> animationMap, Map<String, Color[][]> collisionMap) {
-        Map<String, Image> imageMap = new HashMap<>();
-        File spriteFile = new File("level_" + map + "_assets.txt");
+        File spriteFile = new File("assets/leveldata/level_" + map + "_assets.dat");
 
         try (Scanner scanner = new Scanner(spriteFile)) {
 
@@ -131,22 +136,21 @@ public class Loader {
                     animationMap.put(entityType, frames);
                 } else if (type.equals("Renderable")){
                     Image img = ImageIO.read(new File(chunk[2].split(":")[1]));
-                    imageMap.put(entityType, img);
-
+                    spriteMap.put(entityType, img);
                 } else if (type.equals("Collidable")){
                     Image img = ImageIO.read(new File(chunk[2].split(":")[1]));
                     BufferedImage bimg = (BufferedImage) img;
-                    Raster raster = bimg.getData();
-                    Color[][] collision = new Color[raster.getWidth()][raster.getHeight()];
-                    for(int x = 0; x < raster.getWidth(); x++){
-                        for(int y = 0; y < raster.getHeight(); y++){
-                            int[] m = new int[3];
-                            int[] rgb = raster.getPixel(x, y, m);
-                            Color color = new Color(rgb[0], rgb[1], rgb[2]);
-                            collision[x][y] = color;
+                    Color[][] collision = new Color[bimg.getWidth()][bimg.getHeight()];
+                    for(int x = 0; x < bimg.getWidth(); x++){
+                        for(int y = 0; y < bimg.getHeight(); y++) {
+                            int clr = bimg.getRGB(x, y);
+                            int red = (clr & 0x00ff0000) >> 16;
+                            int green = (clr & 0x0000ff00) >> 8;
+                            int blue = clr & 0x000000ff;
+                            collision[x][y] = new Color(red, green, blue);
                         }
                     }
-                    collisionMap.put("entityType", collision);
+                    collisionMap.put(entityType, collision);
                 }
             }
 
