@@ -75,7 +75,7 @@ public class SoundManager implements Observerable{
 
 
 
-        this.background.setVolume(.1F);
+        this.background.setVolume(.3F);
         this.impact.setVolume(0.7F);
         footsteps.setVolume(2);
         footsteps.setGain(10000);
