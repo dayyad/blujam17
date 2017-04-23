@@ -17,6 +17,8 @@ public class SoundManager implements Observerable{
     private Sound background;
     private Sound footsteps;
     private Sound gunshot;
+    private Sound impact;
+    private Sound death;
    // private Sound hit_env;
     private Sound die;
 
@@ -28,9 +30,11 @@ public class SoundManager implements Observerable{
 
     private void loadFiles(){
         try {
-            this.background = new Sound(new java.io.File("assets/sounds/kateye_2.wav"));
+            this.background = new Sound(new java.io.File("assets/sounds/music.wav"));
             this.footsteps = new Sound(new java.io.File("assets/sounds/footsteps2.wav"));
             this.gunshot = new Sound(new java.io.File("assets/sounds/gunshot.wav"));
+            this.impact = new Sound(new java.io.File("assets/sounds/impact.wav"));
+            this.death = new Sound(new java.io.File("assets/sounds/death.wav"));
 //            this.hit_env = new Sound(new java.io.File("assets/sounds/grunt_hit.wav"));
 //            this.die = new Sound(new java.io.File("assets/sounds/grunt_dying.wav"));
 
@@ -52,8 +56,29 @@ public class SoundManager implements Observerable{
             }
         });
 
-        footsteps.setVolume(1);
-        footsteps.setGain(30);
+        this.impact.addLineListener((lineEvent) -> {
+            if (lineEvent.getType().equals(LineEvent.Type.STOP)){
+                this.impact.stop();
+            }
+        });
+
+        this.gunshot.addLineListener((lineEvent) -> {
+            if (lineEvent.getType().equals(LineEvent.Type.STOP)){
+                this.gunshot.stop();
+            }
+        });
+        this.death.addLineListener((lineEvent) -> {
+            if (lineEvent.getType().equals(LineEvent.Type.STOP)){
+                this.death.stop();
+            }
+        });
+
+
+
+        this.background.setVolume(.1F);
+        this.impact.setVolume(0.7F);
+        footsteps.setVolume(2);
+        footsteps.setGain(10000);
     }
 
     @Override
@@ -66,11 +91,13 @@ public class SoundManager implements Observerable{
                     }
                     this.playing_footsteps = true;
                 }
+                break;
             case STOP:
                 if (event.getContext() instanceof Player && this.footsteps.playing()){
                     this.playing_footsteps = false;
                     this.footsteps.stop();
                 }
+                break;
             case SHOOT:
                 this.gunshot.play();
                 break;
@@ -78,7 +105,7 @@ public class SoundManager implements Observerable{
              //   this.die.play();
                 break;
             case PHYSICS_BULLET_MAP_COLLISION:
-             //   this.hit_env.play();
+                this.impact.play();
                 break;
             case INITIAL_LOAD:
                 this.background.play();
