@@ -20,6 +20,7 @@ public class Events {
 		LOAD_LEVEL,
 		MENU_UPDATE,
 		SHOOT,
+		DIE,
 		//Spawning/Instantiation
 		
 		//Physics
@@ -30,7 +31,9 @@ public class Events {
 		PHYSICS_BULLET_COLLISION
 
 	}
-	
+	public static Event newDieEvent(){
+		return Events.newEvent(EventType.DIE);
+	}
 	public static Event newEvent(EventType type){
 		return new Event(type);
 	}

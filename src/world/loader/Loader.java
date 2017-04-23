@@ -80,6 +80,7 @@ public class Loader {
 
                         newEntity = new NPC();
                         newEntity.setMovementSpeed(Double.parseDouble(fieldMap.get("MaxSpeed")));
+                        ((NPC)newEntity).setDeathSprite(fieldMap.get("DeathSprite"));
                         newEntity.setX(x);
                         newEntity.setY(y);
                         ((NPC) newEntity).setFrames(animationMap.get(fieldMap.get("animationName")));

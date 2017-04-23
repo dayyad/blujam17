@@ -14,8 +14,16 @@ public class NPC extends Entity implements world.movement.Collidable, Animatable
     Color[][] collisionMap;
     Animator animator = new Animator();
     boolean infected = false;
-    double health;
+    double health = 100;
+    String deathSprite;
 
+    public String getDeathSprite(){return this.deathSprite;}
+    public void setDeathSprite(String deathSprite){this.deathSprite = deathSprite;}
+
+    public void damage(double amt){
+        this.health -= amt;
+        if (this.health <= 0)this.die();
+    }
     @Override
     public void move(double deltaX, double deltaY) {
         if (Math.random() > 0.9) {
@@ -89,7 +97,7 @@ public class NPC extends Entity implements world.movement.Collidable, Animatable
     }
 
     public void die(){
-        Globals.world.addEntity(new StaticSprite(this.getX(), this.getY(), this.getRotation(), "mob1_dead"));
+        Globals.world.addEntity(new StaticSprite(this.getX(), this.getY(), this.getRotation(), this.deathSprite));
         Globals.world.removeEntity(this);
     }
 

@@ -5,8 +5,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import events.*;
+import events.Event;
 import main.Globals;
+import main.Observerable;
 import world.Player;
+import world.World;
 
 import javax.imageio.ImageIO;
 
@@ -37,6 +41,10 @@ public class HUD implements Renderable{
             e.printStackTrace();
         }
 
+    }
+
+    public void setPlayer(Player player){
+        this.player = player;
     }
 
     @Override

@@ -36,7 +36,7 @@ public class Physics extends Subject implements Observerable {
 				Globals.world.removeEntity((Projectile)e.getContext());
 				break;
 			case PHYSICS_PLAYER_MOB_COLLISION:
-				((Player)((Entity[])e.getContext())[0]).removeHealth(.5);
+				((Player)((Entity[])e.getContext())[0]).removeHealth(2);
 				break;
 			case MOVE:
 				this.move((Move) e.getContext());
@@ -73,19 +73,29 @@ public class Physics extends Subject implements Observerable {
 
 		for(Entity otherEntity : this.world.getEntitiesWithType("Collidable")){
 			if (move.getActor() == otherEntity)continue;
-			if (move.getActor() instanceof Projectile && ((Projectile)move.getActor()).getOwner() == otherEntity)continue;
+			if (entity instanceof Projectile && ((Projectile)move.getActor()).getOwner() == otherEntity)continue;
+			if (otherEntity instanceof Projectile && ((Projectile) otherEntity).getOwner() == entity) continue;
+
 			CollisionManager.CollisionType collisionType = this.collisionManager.checkCollisionMap(newX, newY, ((Collidable)entity).getCollisionMap(), otherEntity);
-			if (collisionType.equals(CollisionManager.CollisionType.NEXT_LEVEL)){
+
+			if (collisionType.equals(CollisionManager.CollisionType.NEXT_LEVEL) && entity instanceof Player){
 				this.world.setCurrentLevel(Loader.loadLevel( (++this.world.level) + ""));
 				this.world.notifyObservers(Events.newLoadEvent(this.world));
 			}
+			if (collisionType.equals(CollisionManager.CollisionType.WIN_GAME) && entity instanceof Player){
+				Globals.CurrentMenu = Globals.winMenu;
+				Globals.inputHandler = Globals.menuInputHandler;
+				Globals.gameState = Globals.GameState.DIE;
+				Globals.world.resetLevels();
+			}
+
 			if (!collisionType.equals(CollisionManager.CollisionType.NO_COLLISION)){
 				if (entity instanceof Projectile){
 					if (otherEntity instanceof Stage){
 						this.notifyObservers(Events.newBulletMapCollision((Projectile)entity));
 					} else if (otherEntity instanceof NPC){
 						this.notifyObservers(Events.newBulletEntityCollision((Projectile)entity));
-						((NPC) otherEntity).die();
+						((NPC)otherEntity).damage(((Player)((Projectile)entity).getOwner()).getDamage());
 					} else {
 						this.notifyObservers(Events.newBulletEntityCollision((Projectile)entity));
 					}
@@ -95,7 +105,7 @@ public class Physics extends Subject implements Observerable {
 						this.notifyObservers(Events.newBulletMapCollision((Projectile) otherEntity));
 					} else if (entity instanceof NPC){
 						this.notifyObservers(Events.newBulletEntityCollision((Projectile)otherEntity));
-						((NPC) entity).die();
+						((NPC)entity).damage(((Player)((Projectile)otherEntity).getOwner()).getDamage());
 					} else {
 						this.notifyObservers(Events.newBulletEntityCollision((Projectile)otherEntity));
 					}

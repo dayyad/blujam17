@@ -126,7 +126,7 @@ public abstract class Entity {
 	}
 
 	public Projectile shoot(){
-		Projectile projectile = new Projectile(this.getX(), this.getY(), this.getRotation(), this);
+		Projectile projectile = new Projectile(this.getX(), this.getY(), this.getRotation() + Math.random()/2, this);
 		projectile.setCollisionMap(Loader.collisionMap.get("bullet"));
 		Globals.world.addEntity(projectile);
 		return projectile;

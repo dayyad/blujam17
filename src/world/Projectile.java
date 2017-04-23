@@ -21,6 +21,13 @@ public class Projectile extends Entity implements Renderable, Collidable {
     BufferedImage sprite;
     Entity owner;
 
+    public void setX(double x){
+        this.x = x;
+    }
+    public void setY(double y){
+        this.y = y;
+    }
+
     public Projectile(double x, double y, double rotation, Entity owner){
         this.x = x;
         this.y = y;

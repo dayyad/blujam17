@@ -11,6 +11,7 @@ import main.*;
 import physics.Move;
 import physics.Physics;
 import world.Entity;
+import world.Player;
 import world.World;
 
 public class Input extends UserActions implements Observerable{
@@ -21,7 +22,7 @@ public class Input extends UserActions implements Observerable{
 		ROTATE, PAUSE, MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT
 	}
 
-	private Entity player;
+	private Player player;
 	private Subject subject;
 	private Map<Integer, Boolean> keyPressedMap = new HashMap<>();
 	private Map<Action, Integer> keyBindings = new HashMap<>();
@@ -66,6 +67,7 @@ public class Input extends UserActions implements Observerable{
 			Globals.gameState = Globals.GameState.PAUSED;
 			Globals.CurrentMenu = Globals.pauseMenu;
 			Globals.inputHandler = Globals.menuInputHandler;
+			subject.notifyObservers(Events.newMenuUpdate());
 		} else {
 			this.keyPressedMap.put(e.getKeyCode(), true);
 		}
@@ -144,7 +146,13 @@ public class Input extends UserActions implements Observerable{
 				}
 				break;
 			case LOAD:
-				this.player = ((World)event.getContext()).getEntitiesWithType("Player").iterator().next();
+				Player newPlayer = (Player)((World)event.getContext()).getEntitiesWithType("Player").iterator().next();
+				if (this.player != null)newPlayer.setHealth(this.player.getHealth());
+				this.player = newPlayer;
+				if (Globals.hud != null)Globals.hud.setPlayer(this.player);
+				break;
+			case DIE:
+				this.player = null;
 				break;
 		}
 	}

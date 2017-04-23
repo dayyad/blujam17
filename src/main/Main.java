@@ -4,9 +4,7 @@ import ai.AI;
 import ecs100.UI;
 import events.*;
 import input.Input;
-import menu.InputHandler;
-import menu.MainMenu;
-import menu.PauseMenu;
+import menu.*;
 import physics.Physics;
 import renderer.HUD;
 import renderer.Renderer;
@@ -85,17 +83,22 @@ public class Main extends Subject {
 
 		Globals.mainCanvas = canvas;
 		Globals.mainMenu = new MainMenu(this, this.frame.getWidth(), this.frame.getHeight());
+		Globals.winMenu = new WinMenu(this, this.frame.getWidth(), this.frame.getHeight());
+		Globals.dieMenu = new DieMenu(this, this.frame.getWidth(), this.frame.getHeight());
+
 		Globals.CurrentMenu = Globals.mainMenu;
 		Globals.pauseMenu = new PauseMenu(this, this.frame.getWidth(), this.frame.getHeight());
 		Globals.menuInputHandler = this.menuInput;
 		Globals.gameInputHandler = this.input;
 		Globals.inputHandler = Globals.menuInputHandler;
 		Globals.world = this.world;
+
 		canvas.addKeyListener(inputWrapper);
 		canvas.addMouseListener(inputWrapper);
 		canvas.addMouseMotionListener(inputWrapper);
 
 		this.notifyObservers(Events.newInitialLoadEvent());
+		this.notifyObservers(Events.newMenuUpdate());
 
 	}
 
@@ -112,9 +115,7 @@ public class Main extends Subject {
 	}
 
 	public void start(){
-
-
-		this.world.setCurrentLevel(Loader.loadLevel( this.world.level + ""));
+		this.world.setCurrentLevel(Loader.loadLevel("1"));
 		this.world.notifyObservers(Events.newLoadEvent(this.world));
 
         Globals.hud = new HUD((Player)this.world.getEntitiesWithType("Player").iterator().next());
@@ -128,6 +129,10 @@ public class Main extends Subject {
 				if (Globals.gameState == Globals.GameState.IN_GAME) {
 					Main.this.notifyObservers(Events.newTickEvent());
 				}
+				if (Globals.gameState == Globals.GameState.DIE){
+				    Main.this.notifyObservers(Events.newDieEvent());
+				    this.cancel();
+                }
 			}
 		};
 		Timer timer = new Timer();

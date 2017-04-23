@@ -21,6 +21,8 @@ public class World extends Subject implements Observerable {
 	private Level currentLevel;
 	public int level = 1;
 
+	public void resetLevels(){this.level = 1;}
+
 	public void setCurrentLevel(Level level){
 		this.currentLevel = level;
 	}

@@ -12,7 +12,7 @@ import java.awt.*;
  */
 public class Globals {
     public enum GameState{
-        IN_MENU, IN_GAME, PAUSED, LOADING
+        IN_MENU, IN_GAME, PAUSED, LOADING, DIE
     }
 
     public static GameState gameState = GameState.IN_MENU;
@@ -24,6 +24,8 @@ public class Globals {
 
     public static Menu pauseMenu;
     public static Menu mainMenu;
+    public static Menu dieMenu;
+    public static Menu winMenu;
 
     public static UserActions gameInputHandler;
     public static UserActions menuInputHandler;

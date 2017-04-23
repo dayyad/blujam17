@@ -5,18 +5,21 @@ import java.awt.Image;
 import java.util.Collection;
 import java.util.List;
 
+import main.Globals;
 import world.movement.Collidable;
 import world.movement.Collider;
 
 public class Player extends Entity implements Collidable, Animatable{
 
-
+	public double getDamage(){return 10;}
 	//Animatable
 	boolean isVisible;
 	int currentFrame;
 	Animator animator;
 	Color[][] collisionMap;
 	double health = 100;
+
+	public void setHealth(double health){this.health = health;}
 
 	public Player(double x, double y){
 		this.animator = new Animator();
@@ -26,7 +29,10 @@ public class Player extends Entity implements Collidable, Animatable{
 	}
 	public void removeHealth(double h){
 		this.health -= h;
-		if (health < 0)this.health = 0;
+		if (health < 0){
+			this.die();
+			this.health = 0;
+		}
 	}
 
 	public void addHealth(double h){
@@ -56,6 +62,21 @@ public class Player extends Entity implements Collidable, Animatable{
 	@Override
 	public List<Image> getFrames() {
 		return this.animator.getFrames();
+	}
+
+	@Override
+	public Projectile shoot(){
+		Projectile projectile = super.shoot();
+		projectile.setX(this.getX() + this.getCollisionMap().length/2);
+		projectile.setY(this.getY() + this.getCollisionMap()[0].length/2);
+		return projectile;
+	}
+
+	public void die(){
+		Globals.CurrentMenu = Globals.dieMenu;
+		Globals.inputHandler = Globals.menuInputHandler;
+		Globals.gameState = Globals.GameState.DIE;
+		Globals.world.resetLevels();
 	}
 
 }

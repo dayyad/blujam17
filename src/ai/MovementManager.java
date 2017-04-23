@@ -3,6 +3,7 @@ package ai;
 import menu.PauseMenu;
 import world.Entity;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ public class MovementManager {
     public enum state{CHASING, WALKING, STOPPED}
 
     private Map<Entity, state> entityStateMap = new HashMap<>();
+    private Map<Entity, Point> entityTargetMap = new HashMap<>();
     private final Entity playerEntity;
 
     MovementManager(Entity playerEntity){
@@ -44,10 +46,24 @@ public class MovementManager {
         return new double[]{xMove, yMove};
     }
 
+    private boolean closeEnough(Point p, Entity e){
+        return (e.getY() < p.getY() + 5 && e.getY() > p.getY() - 5
+                && e.getX() < p.getX() + 5 && e.getX() > p.getX() - 5);
+    }
+
     private double[] getWalkingMovement(Entity entity){
-        double xMovement = (Math.random() * entity.getMovementSpeed());
-        double yMovement = Math.sqrt(Math.pow(entity.getMovementSpeed(), 2) - Math.pow(xMovement, 2));
-        return new double[]{xMovement - (entity.getMovementSpeed()/2), yMovement - (entity.getMovementSpeed()/2)};
+        if (this.entityTargetMap.get(entity) == null || this.closeEnough(this.entityTargetMap.get(entity), entity) || Math.random() > 0.99){
+            double newX = entity.getX() + (Math.random() * 150 - 75);
+            double newY = entity.getY() + (Math.random() * 150 - 75);
+            this.entityTargetMap.put(entity, new Point((int)newX, (int)newY));
+        }
+        Point target = this.entityTargetMap.get(entity);
+        double deltaX = target.getX() - entity.getX();
+        double deltaY = target.getY() - entity.getY();
+        double hyp = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+        double xMovement = entity.getMovementSpeed()/hyp * deltaX;
+        double yMovement = entity.getMovementSpeed()/hyp * deltaY;
+        return new double[]{xMovement, yMovement};
     }
 
     private void updateState(Entity entity){
