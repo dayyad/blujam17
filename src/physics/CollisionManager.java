@@ -14,12 +14,12 @@ public class CollisionManager {
     public Map<Color, CollisionType> collisionTypeMap = new HashMap<>();
 
     public enum CollisionType{
-        NEXT_LEVEL, PRE_LEVEL, ENTITY, MAP, WIN_GAME, START_GAME
+        NEXT_LEVEL, PRE_LEVEL, ENTITY, MAP, WIN_GAME, START_GAME, NO_COLLISION
     }
 
     public CollisionManager(){
         this.collisionTypeMap.put(new Color(255, 0,48), CollisionType.MAP);
-        this.collisionTypeMap.put(new Color(255, 0,48), CollisionType.ENTITY);
+        this.collisionTypeMap.put(new Color(240, 0,0), CollisionType.ENTITY);
         this.collisionTypeMap.put(new Color(0, 255,6), CollisionType.NEXT_LEVEL);
         this.collisionTypeMap.put(new Color(0, 199,3), CollisionType.PRE_LEVEL);
         this.collisionTypeMap.put(new Color(107,255,109), CollisionType.WIN_GAME);
@@ -40,20 +40,20 @@ public class CollisionManager {
         return false;
     }
 
-    boolean checkCollisionMap(double x1, double y1, Color[][] collisionMap1, Entity otherEntity){
-        if (!(otherEntity instanceof Collidable))return false;
+    CollisionType checkCollisionMap(double x1, double y1, Color[][] collisionMap1, Entity otherEntity){
+        if (!(otherEntity instanceof Collidable))return CollisionType.NO_COLLISION;
         return this.checkCollisionMap(x1, y1, collisionMap1, otherEntity.getX(), otherEntity.getY(), ((Collidable)otherEntity).getCollisionMap());
     }
 
-    boolean checkCollisionMap(double x1, double y1, Color[][] collisionMap1, double x2, double y2, Color[][] collisionMap2){
+    CollisionType checkCollisionMap(double x1, double y1, Color[][] collisionMap1, double x2, double y2, Color[][] collisionMap2){
         // Validate the CollisionMaps
-        if (collisionMap1 == null || collisionMap2 == null)return false;
-        if (collisionMap1.length == 0 || collisionMap1[0].length == 0 || collisionMap2.length == 0 || collisionMap2[0].length == 0) return false;
+        if (collisionMap1 == null || collisionMap2 == null)return CollisionType.NO_COLLISION;
+        if (collisionMap1.length == 0 || collisionMap1[0].length == 0 || collisionMap2.length == 0 || collisionMap2[0].length == 0) return CollisionType.NO_COLLISION;;
 
         // Check that they do overlap
         if (!(x1 + collisionMap1.length > x2 && x1 < x2 + collisionMap2.length
                 && y1 + collisionMap1[0].length > y2 && y1 < y2 + collisionMap2[0].length)){
-            return false;
+            return CollisionType.NO_COLLISION;
         }
 
         // Check for collision
@@ -75,14 +75,27 @@ public class CollisionManager {
             y2_i = Math.abs(yDiff);
         }
 
-        for (x1_i = x1_i, x2_i = x2_i; x1_i < collisionMap1.length && x2_i < collisionMap2.length; x1_i++, x2_i++){
-            for (y1_i = y1_i,y2_i = y2_i; y1_i < collisionMap1[0].length && y2_i < collisionMap2[0].length; y1_i++, y2_i++){
-                if (collisionTypeMap.containsKey(collisionMap1[x1_i][y1_i]) && collisionTypeMap.containsKey(collisionMap2[x2_i][y2_i])){
-                    return true;
+        //System.out.println("entity at { " + x1 + " , " + y1 + " }");
+        //System.out.println("entity collision { " + collisionMap1.length + " , " + collisionMap1[0].length + " }");
+        //System.out.println("entity collision { " + collisionMap2.length + " , " + collisionMap2[0].length + " }");
+        int x1_i_start = x1_i;
+        int x2_i_start = x2_i;
+        int y1_i_start = y1_i;
+        int y2_i_start = y2_i;
+        for (x1_i = x1_i_start, x2_i = x2_i_start; x1_i < collisionMap1.length && x2_i < collisionMap2.length; x1_i++, x2_i++){
+            for (y1_i = y1_i_start,y2_i = y2_i_start; y1_i < collisionMap1[0].length && y2_i < collisionMap2[0].length; y1_i++, y2_i++){
+                //System.out.println("checking { " + x2_i + " , " + y2_i + " } against { " + x1_i + " , " + y1_i + " }");
+
+                if (collisionTypeMap.containsKey(collisionMap1[x1_i][y1_i]) && collisionTypeMap.containsKey(collisionMap2[x2_i][y2_i])) {
+                    if (collisionMap1[x1_i][y1_i].getGreen() > 0){
+                        return this.collisionTypeMap.get(collisionMap1[x1_i][y1_i]);
+                    } else {
+                        return this.collisionTypeMap.get(collisionMap2[x2_i][y2_i]);
+                    }
                 }
             }
         }
-        return false;
+        return CollisionType.NO_COLLISION;
     }
 
     /*private Color[][] getRotatedCollisionMap(Color[][] collisionMap, double theta){

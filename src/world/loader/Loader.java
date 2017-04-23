@@ -26,6 +26,10 @@ import javax.imageio.ImageIO;
 
 public class Loader {
 
+    public static Map<String, Image> spriteMap = new HashMap<>();
+    public static Map<String, List<Image>> animationMap = new HashMap<>();
+    public static Map<String, Color[][]> collisionMap = new HashMap<>();
+
     /**
      * To add a new type, add the type to the switch case
      * <p>
@@ -40,9 +44,9 @@ public class Loader {
         File entityFile = new File("assets/leveldata/level_" + number + "_entities.dat");
         Level newLevel = new Level();
 
-        Map<String, Image> spriteMap = new HashMap<>();
-        Map<String, List<Image>> animationMap = new HashMap<>();
-        Map<String, Color[][]> collisionMap = new HashMap<>();
+        spriteMap = new HashMap<>();
+        animationMap = new HashMap<>();
+        collisionMap = new HashMap<>();
 
         Loader.loadAssets(number, spriteMap, animationMap, collisionMap);
 
@@ -138,8 +142,14 @@ public class Loader {
                     Image img = ImageIO.read(new File(chunk[2].split(":")[1]));
                     spriteMap.put(entityType, img);
                 } else if (type.equals("Collidable")){
-                    Image img = ImageIO.read(new File(chunk[2].split(":")[1]));
-                    BufferedImage bimg = (BufferedImage) img;
+                    Image img;
+                    if (chunk.length > 3 && chunk[3].equals("scale")) {
+                        img = ImageIO.read(new File(chunk[2].split(":")[1])).getScaledInstance(Globals.mainCanvas.getWidth(), Globals.mainCanvas.getHeight(), Image.SCALE_SMOOTH);
+                    } else {
+                        img = ImageIO.read(new File(chunk[2].split(":")[1]));
+                    }
+                    BufferedImage bimg = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+                    bimg.createGraphics().drawImage(img, 0, 0, null);
                     Color[][] collision = new Color[bimg.getWidth()][bimg.getHeight()];
                     for(int x = 0; x < bimg.getWidth(); x++){
                         for(int y = 0; y < bimg.getHeight(); y++) {

@@ -59,6 +59,9 @@ public class Renderer implements Observerable {
 				drawToOffScreen(((world.Animatable) entity).getAnimator().nextFrame(), entity.getX(), entity.getY(),
 						entity.getRotation());
 			}
+			if (Globals.hud != null) {
+				drawToOffScreen(Globals.hud.getSprite(), Globals.hud.getX(), Globals.hud.getY(), 0);
+			}
 			if (Globals.CurrentMenu != null){
 				drawToOffScreen(Globals.CurrentMenu.getSprite(), Globals.CurrentMenu.getX(), Globals.CurrentMenu.getY(), 0);
 			}

@@ -88,5 +88,10 @@ public class NPC extends Entity implements world.movement.Collidable, Animatable
         return this.animator;
     }
 
+    public void die(){
+        Globals.world.addEntity(new StaticSprite(this.getX(), this.getY(), this.getRotation(), "mob1_dead"));
+        Globals.world.removeEntity(this);
+    }
+
 
 }

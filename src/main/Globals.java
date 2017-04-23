@@ -1,6 +1,7 @@
 package main;
 
 import menu.Menu;
+import renderer.HUD;
 import world.World;
 
 import javax.swing.*;
@@ -18,6 +19,7 @@ public class Globals {
     public static Menu CurrentMenu;
     public static JComponent mainCanvas;
     public static UserActions inputHandler;
+
     public static World world;
 
     public static Menu pauseMenu;
@@ -25,4 +27,6 @@ public class Globals {
 
     public static UserActions gameInputHandler;
     public static UserActions menuInputHandler;
+
+    public static HUD hud;
 }

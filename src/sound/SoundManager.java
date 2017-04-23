@@ -17,6 +17,8 @@ public class SoundManager implements Observerable{
     private Sound background;
     private Sound footsteps;
     private Sound gunshot;
+   // private Sound hit_env;
+    private Sound die;
 
     private boolean playing_footsteps;
 
@@ -29,6 +31,9 @@ public class SoundManager implements Observerable{
             this.background = new Sound(new java.io.File("assets/sounds/kateye_2.wav"));
             this.footsteps = new Sound(new java.io.File("assets/sounds/footsteps2.wav"));
             this.gunshot = new Sound(new java.io.File("assets/sounds/gunshot.wav"));
+//            this.hit_env = new Sound(new java.io.File("assets/sounds/grunt_hit.wav"));
+//            this.die = new Sound(new java.io.File("assets/sounds/grunt_dying.wav"));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,7 +71,14 @@ public class SoundManager implements Observerable{
                     this.playing_footsteps = false;
                     this.footsteps.stop();
                 }
-            case PHYSICS_COLLISION:
+            case SHOOT:
+                this.gunshot.play();
+                break;
+            case PHYSICS_BULLET_ENTITY_COLLISION:
+             //   this.die.play();
+                break;
+            case PHYSICS_BULLET_MAP_COLLISION:
+             //   this.hit_env.play();
                 break;
             case INITIAL_LOAD:
                 this.background.play();

@@ -19,6 +19,7 @@ public class World extends Subject implements Observerable {
 
 	// Map fields
 	private Level currentLevel;
+	public int level = 1;
 
 	public void setCurrentLevel(Level level){
 		this.currentLevel = level;

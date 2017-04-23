@@ -2,6 +2,9 @@ package events;
 
 import physics.Move;
 import world.Entity;
+import world.NPC;
+import world.Player;
+import world.Projectile;
 import world.World;
 
 public class Events {
@@ -21,10 +24,11 @@ public class Events {
 		
 		//Physics
 		PHYSICS_COLLISION,
-		
-		//Network
-		
-		//
+		PHYSICS_PLAYER_MOB_COLLISION,
+		PHYSICS_BULLET_MAP_COLLISION,
+		PHYSICS_BULLET_ENTITY_COLLISION,
+		PHYSICS_BULLET_COLLISION
+
 	}
 	
 	public static Event newEvent(EventType type){
@@ -33,6 +37,20 @@ public class Events {
 	
 	public static Event newEvent(EventType type, Object context){
 		return new Event(type, context);
+	}
+
+	public static Event newBulletMapCollision(Projectile bullet){
+		return Events.newEvent(EventType.PHYSICS_BULLET_MAP_COLLISION, bullet);
+	}
+	public static Event newBulletEntityCollision(Projectile bullet){
+		return Events.newEvent(EventType.PHYSICS_BULLET_ENTITY_COLLISION, bullet);
+	}
+	public static Event newBulletCollision(Projectile bullet){
+		return Events.newEvent(EventType.PHYSICS_BULLET_COLLISION, bullet);
+	}
+
+	public static Event newPlayerMobCollision(Player player, NPC mob){
+		return Events.newEvent(EventType.PHYSICS_PLAYER_MOB_COLLISION, new Entity[] {player, mob});
 	}
 
 	public static Event newInitialLoadEvent(){

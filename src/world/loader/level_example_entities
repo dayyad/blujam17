@@ -1,3 +1,2 @@
-
-
-type:npc,infected:true,positionX:200,positionY:300,health:100,maxSpeed:10
+type:npc,infected:true,positionX:500,positionY:500,health:100,maxSpeed:1.5
+type:npc,infected:true,positionX:700,positionY:50,health:100,maxSpeed:2.5

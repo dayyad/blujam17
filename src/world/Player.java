@@ -26,6 +26,7 @@ public class Player extends Entity implements Collidable, Animatable{
 	}
 	public void removeHealth(double h){
 		this.health -= h;
+		if (health < 0)this.health = 0;
 	}
 
 	public void addHealth(double h){
