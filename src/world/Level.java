@@ -6,23 +6,25 @@ import java.util.HashMap;
 import renderer.Renderable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Level {
     Stage stage;
     Collection<Entity> entities = new ArrayList<>();
-    Map<String, Set<Entity>> entityMap = new HashMap<>();
+    Map<String, List<Entity>> entityMap = new ConcurrentHashMap<>();
 
     public Level() {
         initEntityMap();
     }
 
     private void initEntityMap() {
-        entityMap.put("Collidable", new HashSet<Entity>());
-        entityMap.put("Renderable", new HashSet<Entity>());
-        entityMap.put("Animatable", new HashSet<Entity>());
-        entityMap.put("NPC", new HashSet<Entity>());
-        entityMap.put("Player", new HashSet<Entity>());
-        entityMap.put("Stage", new HashSet<Entity>());
+        entityMap.put("Collidable", new CopyOnWriteArrayList<>());
+        entityMap.put("Renderable", new CopyOnWriteArrayList<>());
+        entityMap.put("Animatable", new CopyOnWriteArrayList<>());
+        entityMap.put("NPC", new CopyOnWriteArrayList<>());
+        entityMap.put("Player", new CopyOnWriteArrayList<>());
+        entityMap.put("Stage", new CopyOnWriteArrayList<>());
     }
 
     // Filters new entities into their relevant places.
