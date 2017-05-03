@@ -59,7 +59,7 @@ public class Main extends Subject {
 		this.world.addObserver(this.ai);
 
 
-		//this.soundManager.update(Events.newLoadEvent());
+		//this.soundManager.update(Events.newLevelLoadEvent());
 
 		this.frame = UI.getFrame();
 		this.frame.setVisible(false);
@@ -118,7 +118,7 @@ public class Main extends Subject {
 	 */
 	public void start(){
 		this.world.setCurrentLevel(Loader.loadLevel("1"));
-		this.world.notifyObservers(Events.newLoadEvent(this.world));
+		this.world.notifyObservers(Events.newLevelLoadEvent(this.world));
 
         Globals.hud = new HUD((Player)this.world.getEntitiesWithType("Player").iterator().next());
         Globals.gameState = Globals.GameState.IN_GAME;

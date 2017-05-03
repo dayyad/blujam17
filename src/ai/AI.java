@@ -36,7 +36,8 @@ public class AI extends Subject implements Observable {
 					this.notifyObservers(Events.newMoveEvent(entity, movement[0], movement[1]));
 				}
 				break;
-			case LOAD:
+			case LEVEL_LOAD:
+
 				this.movementManager = new MovementManager(((World)event.getContext()).getEntitiesWithType("Player").iterator().next());
 				break;
 		}

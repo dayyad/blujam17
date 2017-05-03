@@ -109,7 +109,7 @@ public class GameInputHandler implements Observable, UserActions {
 					subject.notifyObservers(Events.newMoveEvent(this.player, deltaX, deltaY));
 				}
 				break;
-			case LOAD:
+			case LEVEL_LOAD:
 				// TODO THIIS SHOULD NOT BE RESPONSIBLE FOR HEALTH CARRY OVER!!!!
 				Player newPlayer = (Player)((World)event.getContext()).getEntitiesWithType("Player").iterator().next();
 				if (this.player != null)newPlayer.setHealth(this.player.getHealth());

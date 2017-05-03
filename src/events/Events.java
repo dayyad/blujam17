@@ -20,9 +20,8 @@ public class Events {
 		MOVE,
 		STOP,
 		TICK,
-		LOAD,
+		LEVEL_LOAD,
 		INITIAL_LOAD,
-		LOAD_LEVEL,
 		MENU_UPDATE,
 		SHOOT,
 		DIE,
@@ -30,12 +29,11 @@ public class Events {
 		
 		//Physics
 		PHYSICS_COLLISION,
-		PHYSICS_PLAYER_MOB_COLLISION,
-		PHYSICS_BULLET_MAP_COLLISION,
-		PHYSICS_BULLET_ENTITY_COLLISION,
-		PHYSICS_BULLET_COLLISION
 
 	}
+	public static Event newLevelLoadEvent(World world) {return new LevelLoadEvent(world);}
+
+
 	public static Event newDieEvent(){
 		return Events.newEvent(EventType.DIE);
 	}
@@ -47,27 +45,9 @@ public class Events {
 		return new Event(type, context);
 	}
 
-	public static Event newBulletMapCollision(Projectile bullet){
-		return Events.newEvent(EventType.PHYSICS_BULLET_MAP_COLLISION, bullet);
-	}
-	public static Event newBulletEntityCollision(Projectile bullet){
-		return Events.newEvent(EventType.PHYSICS_BULLET_ENTITY_COLLISION, bullet);
-	}
-	public static Event newBulletCollision(Projectile bullet){
-		return Events.newEvent(EventType.PHYSICS_BULLET_COLLISION, bullet);
-	}
-
-	public static Event newPlayerMobCollision(Player player, NPC mob){
-		return Events.newEvent(EventType.PHYSICS_PLAYER_MOB_COLLISION, new Entity[] {player, mob});
-	}
-
 	public static Event newInitialLoadEvent(){
 		return Events.newEvent(EventType.INITIAL_LOAD);
 	}
-
-	public static Event newLoadLevelEvent() {return Events.newEvent(EventType.LOAD_LEVEL);}
-
-	public static Event newLoadEvent(World world) {return Events.newEvent(EventType.LOAD, world);}
 	
 	public static Event newCollisionEvent(world.Entity e1, world.Entity e2){
 		Event tempEvent = new Event(EventType.PHYSICS_COLLISION);

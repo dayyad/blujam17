@@ -1,10 +1,7 @@
 package physics;
 
-import events.Event;
-import events.Events;
+import events.*;
 import main.Globals;
-import events.Observable;
-import events.Subject;
 import world.*;
 import world.loader.Loader;
 import world.movement.Collidable;
@@ -31,6 +28,11 @@ public class Physics extends Subject implements Observable {
 		switch (e.getType()) {
 			case SHOOT:
 				this.projectiles.add(((Entity)e.getContext()).shoot());
+				break;
+			case PHYSICS_COLLISION:
+				// TODO make this compile
+				CollisionEvent collisionEvent = (CollisionEvent)e;
+				if (collisionEvent)
 				break;
 			case PHYSICS_BULLET_COLLISION:
 			case PHYSICS_BULLET_ENTITY_COLLISION:
@@ -90,7 +92,7 @@ public class Physics extends Subject implements Observable {
 
 			if (collisionType.equals(CollisionManager.CollisionType.NEXT_LEVEL) && entity instanceof Player){
 				this.world.setCurrentLevel(Loader.loadLevel( (++this.world.level) + ""));
-				this.world.notifyObservers(Events.newLoadEvent(this.world));
+				this.world.notifyObservers(Events.newLevelLoadEvent(this.world));
 			}
 			if (collisionType.equals(CollisionManager.CollisionType.WIN_GAME) && entity instanceof Player){
 				Globals.CurrentMenu = Globals.winMenu;
