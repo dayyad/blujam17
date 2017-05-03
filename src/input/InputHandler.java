@@ -1,62 +1,61 @@
-package main;
+package input;
 
-import input.Input;
-import menu.InputHandler;
+import main.Globals;
 
 import java.awt.event.*;
 
 /**
  * Created by mgoo on 22/04/17.
  */
-public class UserActions implements MouseMotionListener, MouseListener, KeyListener{
+public class InputHandler implements MouseMotionListener, MouseListener, KeyListener{
 
     @Override
     public void keyTyped(KeyEvent e) {
-        Globals.inputHandler.keyTyped(e);
+        Globals.currentInputHandler.keyTyped(e);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        Globals.inputHandler.keyPressed(e);
+        Globals.currentInputHandler.keyPressed(e);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        Globals.inputHandler.keyReleased(e);
+        Globals.currentInputHandler.keyReleased(e);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        Globals.inputHandler.mouseClicked(e);
+        Globals.currentInputHandler.mouseClicked(e);
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        Globals.inputHandler.mousePressed(e);
+        Globals.currentInputHandler.mousePressed(e);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        Globals.inputHandler.mouseReleased(e);
+        Globals.currentInputHandler.mouseReleased(e);
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        Globals.inputHandler.mouseEntered(e);
+        Globals.currentInputHandler.mouseEntered(e);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        Globals.inputHandler.mouseEntered(e);
+        Globals.currentInputHandler.mouseEntered(e);
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        Globals.inputHandler.mouseDragged(e);
+        Globals.currentInputHandler.mouseDragged(e);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        Globals.inputHandler.mouseMoved(e);
+        Globals.currentInputHandler.mouseMoved(e);
     }
 }

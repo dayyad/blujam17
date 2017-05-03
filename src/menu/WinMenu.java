@@ -8,7 +8,8 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by mgoo on 23/04/17.
+ * Defines the win screen
+ * @author Andrew McGhie
  */
 public class WinMenu extends Menu {
 

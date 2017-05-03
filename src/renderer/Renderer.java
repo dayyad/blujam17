@@ -1,22 +1,17 @@
 package renderer;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.nio.Buffer;
-import java.util.Collection;
 import java.util.NoSuchElementException;
 
 import events.Event;
 import main.Globals;
-import main.Observerable;
-import world.Entity;
+import events.Observable;
 import world.Stage;
 import world.World;
 
-public class Renderer implements Observerable {
+public class Renderer implements Observable {
 	private final World world;
 	private BufferedImage offScreen;
 

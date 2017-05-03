@@ -9,7 +9,8 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by mgoo on 22/04/17.
+ * Defines a pause menu
+ * @author Andrew McGhie
  */
 public class PauseMenu extends Menu{
     public PauseMenu(Main main, int screenWidth, int screenHeight){
@@ -25,7 +26,7 @@ public class PauseMenu extends Menu{
             resumeButton.setOnClickEvent(() -> {
                 Globals.CurrentMenu = null;
                 Globals.gameState = Globals.GameState.IN_GAME;
-                Globals.inputHandler = Globals.gameInputHandler;
+                Globals.currentInputHandler = Globals.gameInputHandler;
             });
             quitButton.setOnClickEvent(main::quit);
             this.add(quitButton);

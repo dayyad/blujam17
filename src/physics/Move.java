@@ -5,6 +5,9 @@ import events.Events;
 import main.Command;
 import world.Entity;
 
+/**
+ * TODO remove this and just use a moveEvent
+ */
 public class Move extends Command{
 	private final double deltaX, deltaY;
 

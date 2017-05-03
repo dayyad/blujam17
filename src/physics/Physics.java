@@ -3,22 +3,25 @@ package physics;
 import events.Event;
 import events.Events;
 import main.Globals;
-import main.Observerable;
-import main.Subject;
+import events.Observable;
+import events.Subject;
 import world.*;
 import world.loader.Loader;
 import world.movement.Collidable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-public class Physics extends Subject implements Observerable {
+public class Physics extends Subject implements Observable {
 	private final World world;
 	private final CollisionManager collisionManager = new CollisionManager();
 
 	private List<Projectile> projectiles = new ArrayList<>();
 
+	/**
+	 * TODO remove world dependecy instead laod it on load event
+	 * @param world
+	 */
 	public Physics(World world) {
 		this.world = world;
 	}
@@ -65,12 +68,19 @@ public class Physics extends Subject implements Observerable {
 		}
 	}
 
+	/**
+	 * Makes sure that the move is valid ie that there in no collisions where the entity is moving to
+	 * TODO make the move parameters part of the move event
+	 * @param move The Move object
+	 * @return
+	 */
 	private boolean validateMove(Move move) {
 		Entity entity = move.getActor();
 		double newX = entity.getX() + move.getDeltaX();
 		double newY = entity.getY() + move.getDeltaY();
 		if (!(move.getActor() instanceof Collidable))return true;
 
+		// TODO make this cleaner
 		for(Entity otherEntity : this.world.getEntitiesWithType("Collidable")){
 			if (move.getActor() == otherEntity)continue;
 			if (entity instanceof Projectile && ((Projectile)move.getActor()).getOwner() == otherEntity)continue;
@@ -84,7 +94,7 @@ public class Physics extends Subject implements Observerable {
 			}
 			if (collisionType.equals(CollisionManager.CollisionType.WIN_GAME) && entity instanceof Player){
 				Globals.CurrentMenu = Globals.winMenu;
-				Globals.inputHandler = Globals.menuInputHandler;
+				Globals.currentInputHandler = Globals.menuInputHandler;
 				Globals.gameState = Globals.GameState.DIE;
 				Globals.world.resetLevels();
 			}
@@ -123,10 +133,5 @@ public class Physics extends Subject implements Observerable {
 			}
 		}
 		return true;
-	}
-
-	@Override
-	protected void initObservers() {
-
 	}
 }

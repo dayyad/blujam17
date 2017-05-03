@@ -23,6 +23,13 @@ public class MovementManager {
         this.playerEntity = playerEntity;
     }
 
+    /**
+     * Gets the movement for the entity.
+     * returns an array of where 0 => x, 1 => y
+     * TODO return object rather than array
+     * @param entity The entity that is being controlled by the AI
+     * @return [0 => dx, 1 => dy]
+     */
     double[] getMovement(Entity entity){
         this.entityStateMap.computeIfAbsent(entity, (key) -> this.entityStateMap.put(key, state.WALKING));
         this.updateState(entity);
@@ -37,6 +44,13 @@ public class MovementManager {
         }
     }
 
+    /**
+     * Gets the movement for the AI entity when it is chasing the player
+     * TODO remove dependancy on the player object
+     * TODO return an object rather than an array
+     * @param entity The entity that is being controller by the AI
+     * @return [0 => dx, 1 => dy]
+     */
     private double[] getChasingMovement(Entity entity){
         double xDiff =  this.playerEntity.getX() - entity.getX();
         double yDiff = this.playerEntity.getY() - entity.getY();
@@ -46,11 +60,24 @@ public class MovementManager {
         return new double[]{xMove, yMove};
     }
 
+    /**
+     * checks if the entity is close enough to the target position.
+     * TODO remove this as it is stupid just make sure  the entity doesnt overshoot
+     * @param p
+     * @param e
+     * @return
+     */
     private boolean closeEnough(Point p, Entity e){
         return (e.getY() < p.getY() + 5 && e.getY() > p.getY() - 5
                 && e.getX() < p.getX() + 5 && e.getX() > p.getX() - 5);
     }
 
+    /**
+     * Gets the movement for an AI entity when its in the walking state
+     * TODO return an object rather than an array
+     * @param entity An AI entity
+     * @return [0 => dx, 1 => dy]
+     */
     private double[] getWalkingMovement(Entity entity){
         if (this.entityTargetMap.get(entity) == null || this.closeEnough(this.entityTargetMap.get(entity), entity) || Math.random() > 0.99){
             double newX = entity.getX() + (Math.random() * 150 - 75);
@@ -66,6 +93,11 @@ public class MovementManager {
         return new double[]{xMovement, yMovement};
     }
 
+    /**
+     * Updates the state of the entity
+     * TODO use proper FSM code
+     * @param entity
+     */
     private void updateState(Entity entity){
         double xDiff = entity.getX() - this.playerEntity.getX();
         double yDiff = entity.getY() - this.playerEntity.getY();

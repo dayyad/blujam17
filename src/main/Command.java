@@ -3,7 +3,7 @@ package main;
 import world.Entity;
 
 /**
- * Created by mgoo on 22/04/17.
+ * TODO remove everything can be done from Events
  */
 public abstract class Command {
     Entity actor;

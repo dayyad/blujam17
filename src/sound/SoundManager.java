@@ -3,7 +3,7 @@ package sound;
 
 import ecs100.Sound;
 import events.Event;
-import main.Observerable;
+import events.Observable;
 import physics.Move;
 import world.Player;
 
@@ -13,7 +13,7 @@ import java.io.IOException;
 /**
  * Created by mgoo on 22/04/17.
  */
-public class SoundManager implements Observerable{
+public class SoundManager implements Observable {
     private Sound background;
     private Sound footsteps;
     private Sound gunshot;

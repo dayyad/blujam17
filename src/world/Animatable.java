@@ -3,6 +3,9 @@ import java.awt.Image;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * TODO remove and just use renderable
+ */
 public interface Animatable {
 	
 	List<Image> getFrames();

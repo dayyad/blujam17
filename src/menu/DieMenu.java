@@ -8,7 +8,8 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by mgoo on 23/04/17.
+ * Defines the death screen
+ * @author Andrew McGhie
  */
 public class DieMenu extends Menu {
     public DieMenu(Main main, int screenWidth, int screenHeight) {

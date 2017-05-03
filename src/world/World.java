@@ -1,21 +1,14 @@
 package world;
 
 import java.awt.Color;
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import events.Event;
-import main.Observerable;
-import main.Subject;
-import renderer.Renderable;
+import events.Observable;
+import events.Subject;
 
-public class World extends Subject implements Observerable {
+public class World extends Subject implements Observable {
 
 	// Map fields
 	private Level currentLevel;
@@ -61,10 +54,5 @@ public class World extends Subject implements Observerable {
 		case TICK:
 			break;
 		}
-	}
-
-	@Override
-	protected void initObservers() {
-
 	}
 }

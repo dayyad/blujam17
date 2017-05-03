@@ -2,12 +2,10 @@ package world;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.util.Collection;
 import java.util.List;
 
 import main.Globals;
 import world.movement.Collidable;
-import world.movement.Collider;
 
 public class Player extends Entity implements Collidable, Animatable{
 
@@ -74,7 +72,7 @@ public class Player extends Entity implements Collidable, Animatable{
 
 	public void die(){
 		Globals.CurrentMenu = Globals.dieMenu;
-		Globals.inputHandler = Globals.menuInputHandler;
+		Globals.currentInputHandler = Globals.menuInputHandler;
 		Globals.gameState = Globals.GameState.DIE;
 		Globals.world.resetLevels();
 	}

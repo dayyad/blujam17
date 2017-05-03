@@ -8,16 +8,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by mgoo on 22/04/17.
+ * Checks for collisions between entities
+ * @author Andrew McGhie
  */
-public class CollisionManager {
-    public Map<Color, CollisionType> collisionTypeMap = new HashMap<>();
+class CollisionManager {
+    private Map<Color, CollisionType> collisionTypeMap = new HashMap<>();
 
+    /**
+     * The types of collisions that can occour
+     */
     public enum CollisionType{
         NEXT_LEVEL, PRE_LEVEL, ENTITY, MAP, WIN_GAME, START_GAME, NO_COLLISION
     }
 
-    public CollisionManager(){
+    /**
+     * Sets the initial mapping of colors to types
+     */
+    CollisionManager(){
         this.collisionTypeMap.put(new Color(255, 0,48), CollisionType.MAP);
         this.collisionTypeMap.put(new Color(240, 0,0), CollisionType.ENTITY);
         this.collisionTypeMap.put(new Color(0, 255,6), CollisionType.NEXT_LEVEL);
@@ -26,25 +33,39 @@ public class CollisionManager {
         this.collisionTypeMap.put(new Color(0,53,1), CollisionType.START_GAME);
     }
 
-    boolean checkCollision(double x1, double y1, Color[][] collisionMap, double xl1, double yl1, double xl2, double yl2){
-        double grad = Math.abs(yl1 - yl2)/Math.abs(xl1 - xl2);
-        for (double x = xl1, y = yl1; x <= xl2; x++,y+=grad){
-            if (x-x1 >= 0 && y-y1 >= 0 && x-x1 < collisionMap.length && y-y1 < collisionMap[0].length){
-                if (collisionTypeMap.containsKey(collisionMap[(int)(x-x1)][(int)(y-y1)])){
-                    // colleuisuioatadjal
-                    return true;
-                }
-            }
-        }
-        // NO coluisuison
-        return false;
-    }
+    /**
+     * TODO write method to check collision maps of two entites
+     * @param Entity1
+     * @param Move move amount
+     * @param Entity2
+     * @return The Collision Type
+     */
 
+    /**
+     * Checks the collision map against an entity
+     * TODO also make private when entity to entity method is written
+     * @param x1
+     * @param y1
+     * @param collisionMap1
+     * @param otherEntity
+     * @return The Collision Type
+     */
     CollisionType checkCollisionMap(double x1, double y1, Color[][] collisionMap1, Entity otherEntity){
         if (!(otherEntity instanceof Collidable))return CollisionType.NO_COLLISION;
         return this.checkCollisionMap(x1, y1, collisionMap1, otherEntity.getX(), otherEntity.getY(), ((Collidable)otherEntity).getCollisionMap());
     }
 
+    /**
+     * Compares two collisionMaps and returns the collision type
+     * TODO make private when entity to entity method is written
+     * @param x1
+     * @param y1
+     * @param collisionMap1
+     * @param x2
+     * @param y2
+     * @param collisionMap2
+     * @return The Collision Type
+     */
     CollisionType checkCollisionMap(double x1, double y1, Color[][] collisionMap1, double x2, double y2, Color[][] collisionMap2){
         // Validate the CollisionMaps
         if (collisionMap1 == null || collisionMap2 == null)return CollisionType.NO_COLLISION;
@@ -75,17 +96,12 @@ public class CollisionManager {
             y2_i = Math.abs(yDiff);
         }
 
-        //System.out.println("entity at { " + x1 + " , " + y1 + " }");
-        //System.out.println("entity collision { " + collisionMap1.length + " , " + collisionMap1[0].length + " }");
-        //System.out.println("entity collision { " + collisionMap2.length + " , " + collisionMap2[0].length + " }");
-        int x1_i_start = x1_i;
-        int x2_i_start = x2_i;
+        // Checks for overlap.
         int y1_i_start = y1_i;
         int y2_i_start = y2_i;
-        for (x1_i = x1_i_start, x2_i = x2_i_start; x1_i < collisionMap1.length && x2_i < collisionMap2.length; x1_i++, x2_i++){
+        for (; x1_i < collisionMap1.length && x2_i < collisionMap2.length; x1_i++, x2_i++){
             for (y1_i = y1_i_start,y2_i = y2_i_start; y1_i < collisionMap1[0].length && y2_i < collisionMap2[0].length; y1_i++, y2_i++){
-                //System.out.println("checking { " + x2_i + " , " + y2_i + " } against { " + x1_i + " , " + y1_i + " }");
-
+                // If there is a collision.
                 if (collisionTypeMap.containsKey(collisionMap1[x1_i][y1_i]) && collisionTypeMap.containsKey(collisionMap2[x2_i][y2_i])) {
                     if (collisionMap1[x1_i][y1_i].getGreen() > 0){
                         return this.collisionTypeMap.get(collisionMap1[x1_i][y1_i]);
@@ -97,31 +113,4 @@ public class CollisionManager {
         }
         return CollisionType.NO_COLLISION;
     }
-
-    /*private Color[][] getRotatedCollisionMap(Color[][] collisionMap, double theta){
-        new
-        for (int x=0;x<width;x++){
-            for (int y=0;y<height;y++){
-                double posX=x-width/2,posY=y-height/2;
-                double angle1=(Math.toDegrees(Math.atan(Math.abs(posX/posY))));
-                double Hypo=Math.sqrt((posX*posX)+(posY*posY));
-                if (posX<0){
-                    if (posY<0)angle1-=angle; //yea
-                    if (posY>=0)angle1+=angle;
-                }
-                if (posX>=0){
-                    if (posY<0)angle1+=angle;
-                    if (posY>=0)angle1-=angle; //yea
-                }
-                double newposX=(Hypo*Math.sin(Math.toRadians(angle1)));
-                double newposY=(Hypo*Math.cos(Math.toRadians(angle1)));
-                if (posX<0)newposX*=-1;
-                if (posY<0)newposY*=-1;
-                try{
-                    tempImg[x][y]=permImg[(int) Math.round(width/2+newposX)][(int) Math.round(height/2+newposY)];
-                } catch (Exception e){}
-            }
-        }
-        this.draw();
-    }*/
 }

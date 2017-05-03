@@ -7,14 +7,13 @@ import java.util.Map;
 
 import events.Event;
 import events.Events;
+import events.Observable;
+import events.Subject;
 import main.*;
-import physics.Move;
-import physics.Physics;
-import world.Entity;
 import world.Player;
 import world.World;
 
-public class Input extends UserActions implements Observerable{
+public class GameInputHandler implements Observable, UserActions {
 	private static final int MOUSE_MOVE = 0;
 	private static final int MOUSE_CLICK = 1;
 
@@ -24,11 +23,11 @@ public class Input extends UserActions implements Observerable{
 
 	private Player player;
 	private Subject subject;
+
 	private Map<Integer, Boolean> keyPressedMap = new HashMap<>();
 	private Map<Action, Integer> keyBindings = new HashMap<>();
 	
-	public Input(){
-		super();
+	public GameInputHandler(){
 		keyBindings.put(Action.MOVE_UP, KeyEvent.VK_W);
 		keyBindings.put(Action.MOVE_LEFT, KeyEvent.VK_A);
 		keyBindings.put(Action.MOVE_DOWN, KeyEvent.VK_S);
@@ -43,21 +42,11 @@ public class Input extends UserActions implements Observerable{
 
 		keyBindings.put(Action.ROTATE, MOUSE_MOVE);
 
-		this.subject = new Subject() {
-			@Override
-			protected void initObservers() {
-
-			}
-		};
+		this.subject = new Subject() {};
 	}
 
-	public void addObservers(Observerable observer){
-		subject.addObservers(observer);
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-
+	public void addObservers(Observable observer){
+		subject.addObserver(observer);
 	}
 
 	@Override
@@ -66,7 +55,7 @@ public class Input extends UserActions implements Observerable{
 		if (this.keyBindings.get(Action.PAUSE).equals(e.getKeyCode())){
 			Globals.gameState = Globals.GameState.PAUSED;
 			Globals.CurrentMenu = Globals.pauseMenu;
-			Globals.inputHandler = Globals.menuInputHandler;
+			Globals.currentInputHandler = Globals.menuInputHandler;
 			subject.notifyObservers(Events.newMenuUpdate());
 		} else {
 			this.keyPressedMap.put(e.getKeyCode(), true);
@@ -80,28 +69,8 @@ public class Input extends UserActions implements Observerable{
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
-
-	}
-
-	@Override
 	public synchronized void mousePressed(MouseEvent e) {
 		subject.notifyObservers(Events.newShootEvent(this.player));
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-
 	}
 
 	@Override
@@ -109,11 +78,6 @@ public class Input extends UserActions implements Observerable{
 		if (this.keyBindings.get(Action.ROTATE) == MOUSE_MOVE){
 			this.player.pointTo(e.getX(), e.getY());
 		}
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e){
-
 	}
 
 	@Override
@@ -146,6 +110,7 @@ public class Input extends UserActions implements Observerable{
 				}
 				break;
 			case LOAD:
+				// TODO THIIS SHOULD NOT BE RESPONSIBLE FOR HEALTH CARRY OVER!!!!
 				Player newPlayer = (Player)((World)event.getContext()).getEntitiesWithType("Player").iterator().next();
 				if (this.player != null)newPlayer.setHealth(this.player.getHealth());
 				this.player = newPlayer;

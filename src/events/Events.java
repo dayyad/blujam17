@@ -7,6 +7,11 @@ import world.Player;
 import world.Projectile;
 import world.World;
 
+/**
+ * This is essentually an event factory
+ * TODO make separate objects for different events
+ * @author Andrew McGhie
+ */
 public class Events {
 	
 	public enum EventType {

@@ -16,7 +16,10 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by mgoo on 22/04/17.
+ * The base class that is used to defines differnt menus
+ * that can take up differnt portions of the screen
+ * TODO possibly make a 2D overlay class and have to HUD here
+ * @author Andrew McGhie
  */
 public abstract class Menu implements Renderable {
     private int x = 0,y =0, width, height;

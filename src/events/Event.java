@@ -26,14 +26,14 @@ public class Event {
 	
 	/**
 	 * 
-	 * @param An entity to add as actor
+	 * @param e An entity to add as actor
 	 */
 	public void addActor(world.Entity e) {
 		this.actors.add(e);
 	}
 
 	/**
-	 * @param collection of entities to be added as actors
+	 * @param e collection of entities to be added as actors
 	 */
 	public void addActors(Collection<world.Entity> e){
 		this.actors.addAll(e);

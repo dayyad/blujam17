@@ -1,16 +1,11 @@
 package renderer;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import events.*;
-import events.Event;
 import main.Globals;
-import main.Observerable;
 import world.Player;
-import world.World;
 
 import javax.imageio.ImageIO;
 

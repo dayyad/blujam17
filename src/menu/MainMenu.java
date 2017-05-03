@@ -10,7 +10,8 @@ import java.io.IOException;
 
 
 /**
- * Created by mgoo on 22/04/17.
+ * defines the Main menue
+ * @author Andrew McGhie
  */
 public class MainMenu extends Menu{
 
