@@ -4,14 +4,17 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import ai.AI;
 import events.Event;
 import events.Observable;
 import events.Subject;
+import physics.Physics;
 
 public class World extends Subject implements Observable {
 
 	// Map fields
 	private Level currentLevel;
+
 	public int level = 1;
 
 	public void resetLevels(){this.level = 1;}
@@ -21,7 +24,6 @@ public class World extends Subject implements Observable {
 	}
 
 	public World() {
-		super();
 	}
 
 	// Filters new entities into their relevant places.
@@ -52,6 +54,7 @@ public class World extends Subject implements Observable {
 	public void update(Event event) {
 		switch (event.getType()) {
 		case TICK:
+			this.notifyObservers(event);
 			break;
 		}
 	}

@@ -1,5 +1,6 @@
 package world;
 
+import events.MoveEvent;
 import physics.Move;
 import renderer.Renderable;
 import world.movement.Collidable;
@@ -63,9 +64,9 @@ public class Projectile extends Entity implements Renderable, Collidable {
         this.collisionMap = map;
     }
 
-    public Move getMovement(){
+    public MoveEvent getMovement(){
         double deltaX = -(PROJECTILE_SPEED * Math.sin(this.getRotation()));
         double deltaY = PROJECTILE_SPEED * Math.cos(this.getRotation());
-        return new Move(this, deltaX, deltaY);
+        return new MoveEvent(this, deltaX, deltaY);
     }
 }

@@ -10,17 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Physics extends Subject implements Observable {
-	private final World world;
 	private final CollisionManager collisionManager = new CollisionManager();
 
 	private List<Projectile> projectiles = new ArrayList<>();
-
-	/**
-	 * TODO remove world dependecy instead laod it on load event
-	 * @param world
-	 */
-	public Physics(World world) {
-		this.world = world;
+	private World world;
+	
+	public Physics() {
+		
 	}
 
 	@Override
@@ -30,62 +26,66 @@ public class Physics extends Subject implements Observable {
 				this.projectiles.add(((Entity)e.getContext()).shoot());
 				break;
 			case PHYSICS_COLLISION:
-				// TODO make this compile
 				CollisionEvent collisionEvent = (CollisionEvent)e;
-				if (collisionEvent)
-				break;
-			case PHYSICS_BULLET_COLLISION:
-			case PHYSICS_BULLET_ENTITY_COLLISION:
-			case PHYSICS_BULLET_MAP_COLLISION:
-				this.projectiles.remove((Projectile)e.getContext());
-				Globals.world.removeEntity((Projectile)e.getContext());
-				break;
-			case PHYSICS_PLAYER_MOB_COLLISION:
-				((Player)((Entity[])e.getContext())[0]).removeHealth(2);
+				if (collisionEvent.hasPlayer()){
+					// If the Collision is between a NPC and the player
+					if (collisionEvent.hasNPC()){
+						// TODO get the damage from the entity and use that instead of arbitrary 2
+						collisionEvent.getPlayer().removeHealth(2);
+					}
+				}
+				if (collisionEvent.hasProjectile() && collisionEvent.hasStage()){
+					this.projectiles.remove(collisionEvent.getProjectile());
+					this.world.removeEntity(collisionEvent.getProjectile());
+				}
 				break;
 			case MOVE:
-				this.move((Move) e.getContext());
+				this.move((MoveEvent)e);
 				break;
-
 			case TICK:
 				for (int i = 0; i < this.projectiles.size(); i++){
 					if (this.projectiles.get(i).getX() < 0
 							|| this.projectiles.get(i).getY() < 0
 							|| this.projectiles.get(i).getX() > Globals.mainCanvas.getWidth()
 							|| this.projectiles.get(i).getY() > Globals.mainCanvas.getHeight()){
-						Globals.world.removeEntity(this.projectiles.get(i));
+						this.world.removeEntity(this.projectiles.get(i));
 						this.projectiles.remove(i);
 						i--;
 						continue;
 					}
-					this.notifyObservers(Events.newMoveEvent(this.projectiles.get(i).getMovement()));
+					this.notifyObservers(this.projectiles.get(i).getMovement());
 				}
 				break;
+			case LEVEL_LOAD:
+				LevelLoadEvent levelLoadEvent = (LevelLoadEvent)e;
+				this.world = levelLoadEvent.getWorld();
 		}
 	}
 
-	private void move(Move move) {
-		if (this.validateMove(move)){
-			move.execute();
+	private void move(MoveEvent moveEvent) {
+		if (this.validateMove(moveEvent)){
+			moveEvent.execute();
 		}
 	}
 
 	/**
 	 * Makes sure that the move is valid ie that there in no collisions where the entity is moving to
 	 * TODO make the move parameters part of the move event
-	 * @param move The Move object
+	 * @param moveEvent The Move object
 	 * @return
 	 */
-	private boolean validateMove(Move move) {
-		Entity entity = move.getActor();
-		double newX = entity.getX() + move.getDeltaX();
-		double newY = entity.getY() + move.getDeltaY();
-		if (!(move.getActor() instanceof Collidable))return true;
+	private boolean validateMove(MoveEvent moveEvent) {
+		Entity entity = moveEvent.getEntity();
+		double newX = entity.getX() + moveEvent.getX();
+		double newY = entity.getY() + moveEvent.getY();
+		if (!(entity instanceof Collidable))return true;
 
 		// TODO make this cleaner
 		for(Entity otherEntity : this.world.getEntitiesWithType("Collidable")){
-			if (move.getActor() == otherEntity)continue;
-			if (entity instanceof Projectile && ((Projectile)move.getActor()).getOwner() == otherEntity)continue;
+			if (entity == otherEntity)continue;
+
+			// Checks that an entity can not collide with its owner
+			if (entity instanceof Projectile && ((Projectile)entity).getOwner() == otherEntity)continue;
 			if (otherEntity instanceof Projectile && ((Projectile) otherEntity).getOwner() == entity) continue;
 
 			CollisionManager.CollisionType collisionType = this.collisionManager.checkCollisionMap(newX, newY, ((Collidable)entity).getCollisionMap(), otherEntity);
@@ -98,39 +98,11 @@ public class Physics extends Subject implements Observable {
 				Globals.CurrentMenu = Globals.winMenu;
 				Globals.currentInputHandler = Globals.menuInputHandler;
 				Globals.gameState = Globals.GameState.DIE;
-				Globals.world.resetLevels();
+				this.world.resetLevels();
 			}
 
 			if (!collisionType.equals(CollisionManager.CollisionType.NO_COLLISION)){
-				if (entity instanceof Projectile){
-					if (otherEntity instanceof Stage){
-						this.notifyObservers(Events.newBulletMapCollision((Projectile)entity));
-					} else if (otherEntity instanceof NPC){
-						this.notifyObservers(Events.newBulletEntityCollision((Projectile)entity));
-						((NPC)otherEntity).damage(((Player)((Projectile)entity).getOwner()).getDamage());
-					} else {
-						this.notifyObservers(Events.newBulletEntityCollision((Projectile)entity));
-					}
-				}
-				if (otherEntity instanceof Projectile) {
-					if (entity instanceof Stage) {
-						this.notifyObservers(Events.newBulletMapCollision((Projectile) otherEntity));
-					} else if (entity instanceof NPC){
-						this.notifyObservers(Events.newBulletEntityCollision((Projectile)otherEntity));
-						((NPC)entity).damage(((Player)((Projectile)otherEntity).getOwner()).getDamage());
-					} else {
-						this.notifyObservers(Events.newBulletEntityCollision((Projectile)otherEntity));
-					}
-				}
-
-				if (entity instanceof Player && otherEntity instanceof NPC) {
-					this.notifyObservers(Events.newPlayerMobCollision((Player)entity, (NPC)otherEntity));
-				}
-				if (entity instanceof NPC && otherEntity instanceof Player){
-					this.notifyObservers(Events.newPlayerMobCollision((Player)otherEntity, (NPC)entity));
-				}
 				this.notifyObservers(Events.newCollisionEvent(entity, otherEntity));
-
 				return false;
 			}
 		}

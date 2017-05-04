@@ -1,7 +1,7 @@
 package sound;
 
-
 import ecs100.Sound;
+import events.CollisionEvent;
 import events.Event;
 import events.Observable;
 import physics.Move;
@@ -11,7 +11,9 @@ import javax.sound.sampled.LineEvent;
 import java.io.IOException;
 
 /**
- * Created by mgoo on 22/04/17.
+ * Playes the sounds
+ * Essentually a wrapper for the ecs11 sound liburary
+ * @author Andrew McGhie
  */
 public class SoundManager implements Observable {
     private Sound background;
@@ -101,11 +103,16 @@ public class SoundManager implements Observable {
             case SHOOT:
                 this.gunshot.play();
                 break;
-            case PHYSICS_BULLET_ENTITY_COLLISION:
-             //   this.die.play();
-                break;
-            case PHYSICS_BULLET_MAP_COLLISION:
-                this.impact.play();
+            case PHYSICS_COLLISION:
+                CollisionEvent collisionEvent = (CollisionEvent)event;
+                if (collisionEvent.hasProjectile()){
+                    if (collisionEvent.hasStage()){
+                        this.impact.play();
+                    }
+                    if (collisionEvent.hasNPC()){
+                        // Play the hit sound for the NPC
+                    }
+                }
                 break;
             case INITIAL_LOAD:
                 this.background.play();

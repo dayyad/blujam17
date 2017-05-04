@@ -1,5 +1,6 @@
 package ai;
 
+import events.*;
 import menu.PauseMenu;
 import world.Entity;
 
@@ -10,7 +11,8 @@ import java.util.Map;
 /**
  * Created by mgoo on 22/04/17.
  */
-public class MovementManager {
+class MovementManager {
+    // TODO shift this to the NPC class
     private static final double AI_VIEW_DISATNCE = 300;
 
     public enum state{CHASING, WALKING, STOPPED}
@@ -26,18 +28,17 @@ public class MovementManager {
     /**
      * Gets the movement for the entity.
      * returns an array of where 0 => x, 1 => y
-     * TODO return object rather than array
      * @param entity The entity that is being controlled by the AI
      * @return [0 => dx, 1 => dy]
      */
-    double[] getMovement(Entity entity){
+    MoveEvent getMovement(Entity entity){
         this.entityStateMap.computeIfAbsent(entity, (key) -> this.entityStateMap.put(key, state.WALKING));
         this.updateState(entity);
         switch (this.entityStateMap.get(entity)){
             case CHASING:
                 return this.getChasingMovement(entity);
             case STOPPED:
-                return new double[]{0,0};
+                return Events.newMoveEvent(entity, 0, 0);
             default:
             case WALKING:
                 return this.getWalkingMovement(entity);
@@ -47,17 +48,16 @@ public class MovementManager {
     /**
      * Gets the movement for the AI entity when it is chasing the player
      * TODO remove dependancy on the player object
-     * TODO return an object rather than an array
      * @param entity The entity that is being controller by the AI
      * @return [0 => dx, 1 => dy]
      */
-    private double[] getChasingMovement(Entity entity){
+    private MoveEvent getChasingMovement(Entity entity){
         double xDiff =  this.playerEntity.getX() - entity.getX();
         double yDiff = this.playerEntity.getY() - entity.getY();
         double hyp = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
         double xMove = (entity.getMovementSpeed()/hyp) * xDiff;
         double yMove = (entity.getMovementSpeed()/hyp) * yDiff;
-        return new double[]{xMove, yMove};
+        return Events.newMoveEvent(entity, xMove, yMove);
     }
 
     /**
@@ -74,11 +74,10 @@ public class MovementManager {
 
     /**
      * Gets the movement for an AI entity when its in the walking state
-     * TODO return an object rather than an array
      * @param entity An AI entity
      * @return [0 => dx, 1 => dy]
      */
-    private double[] getWalkingMovement(Entity entity){
+    private MoveEvent getWalkingMovement(Entity entity){
         if (this.entityTargetMap.get(entity) == null || this.closeEnough(this.entityTargetMap.get(entity), entity) || Math.random() > 0.99){
             double newX = entity.getX() + (Math.random() * 150 - 75);
             double newY = entity.getY() + (Math.random() * 150 - 75);
@@ -90,7 +89,7 @@ public class MovementManager {
         double hyp = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
         double xMovement = entity.getMovementSpeed()/hyp * deltaX;
         double yMovement = entity.getMovementSpeed()/hyp * deltaY;
-        return new double[]{xMovement, yMovement};
+        return Events.newMoveEvent(entity, xMovement, yMovement);
     }
 
     /**

@@ -29,7 +29,7 @@ public class CollisionEvent extends Event {
         return this.entity1 instanceof Projectile || this.entity2 instanceof Projectile;
     }
 
-    public boolean hasMap(){
+    public boolean hasStage(){
         return this.entity1 instanceof Stage || this.entity2 instanceof Stage;
     }
 
@@ -48,5 +48,34 @@ public class CollisionEvent extends Event {
         return null;  // Should not reach this.
     }
 
-    // TODO continue writing getNPC getStage ect..
+    public Stage getStage(){
+        assert this.hasStage() : "The collision should have a stage if you call this";
+        if (this.entity1 instanceof Stage)return (Stage)this.entity1;
+        if (this.entity2 instanceof Stage)return (Stage)this.entity2;
+        return null;
+    }
+
+    /**
+     * Gets the Projectile in the collisison
+     * Should only be used when there is one projectile in the collision
+     * @return
+     */
+    public Projectile getProjectile(){
+        assert this.hasProjectile() : "The collision shoudl have a projectile if you call this";
+        if (this.entity1 instanceof Projectile)return (Projectile)this.entity1;
+        if (this.entity2 instanceof Projectile)return (Projectile)this.entity2;
+        return null;
+    }
+
+    /**
+     * gets the NPC in a collision
+     * Should only be used when there is one NPC in the collision
+     * @return
+     */
+    public NPC getNPC(){
+        assert this.hasProjectile() : "The collision should have a NPC if you call this";
+        if (this.entity1 instanceof NPC)return (NPC)this.entity1;
+        if (this.entity2 instanceof NPC)return (NPC)this.entity2;
+        return null;
+    }
 }

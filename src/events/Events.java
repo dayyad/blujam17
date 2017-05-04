@@ -31,7 +31,17 @@ public class Events {
 		PHYSICS_COLLISION,
 
 	}
-	public static Event newLevelLoadEvent(World world) {return new LevelLoadEvent(world);}
+	public static Event newLevelLoadEvent(World world) {
+		return new LevelLoadEvent(world);
+	}
+
+	public static MoveEvent newMoveEvent(Entity entity, double x, double y){
+		return new MoveEvent(entity, x, y);
+	}
+
+	public static Event newCollisionEvent(world.Entity e1, world.Entity e2){
+		return new CollisionEvent(e1, e2);
+	}
 
 
 	public static Event newDieEvent(){
@@ -49,29 +59,13 @@ public class Events {
 		return Events.newEvent(EventType.INITIAL_LOAD);
 	}
 	
-	public static Event newCollisionEvent(world.Entity e1, world.Entity e2){
-		Event tempEvent = new Event(EventType.PHYSICS_COLLISION);
-		tempEvent.addActor(e1);
-		tempEvent.addActor(e2);
-		return tempEvent;
-	}
+
 	
 	public static Event newTickEvent(){
 		return new Event(EventType.TICK);
 	}
 
-	public static Event newMoveEvent(Entity entity, double x, double y){
-		Event moveEvent = new Event(EventType.MOVE, new Move(entity, x, y));
-		moveEvent.addActor(entity);
-		return moveEvent;
-	}
 
-	public static Event newMoveEvent(Move move){
-		assert move.getActor() != null : "The entity should not be null here";
-		Event moveEvent = new Event(EventType.MOVE, move);
-		moveEvent.addActor(move.getActor());
-		return moveEvent;
-	}
 
 	public static Event newMenuUpdate(){
 		return Events.newEvent(EventType.MENU_UPDATE);

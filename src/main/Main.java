@@ -6,6 +6,7 @@ import events.*;
 import input.GameInputHandler;
 import input.MenuInputHandler;
 import input.InputHandler;
+import input.UserActions;
 import menu.*;
 import physics.Physics;
 import renderer.HUD;
@@ -24,43 +25,20 @@ import world.loader.Loader;
 public class Main extends Subject {
 	private static final long TICK_SPEED = 15;
 
-	public World world = new World();
-	private Physics physics = new Physics(this.world);
-	private AI ai = new AI(this.world, this.physics);
-	private Renderer renderer = new Renderer(this.world);
-	private SoundManager soundManager = new SoundManager();
-
-	private GameInputHandler gameInputHandler = new GameInputHandler();
-	private MenuInputHandler menuInput = new MenuInputHandler(this.renderer);
-
-	private InputHandler inputWrapper = new InputHandler();
-
 	private JFrame frame;
+
+	public static void main(String[] args) {
+		new Main();
+	}
 
 	/**
 	 * sets up the frame and the observers
 	 */
 	public Main(){
-		this.addObserver(this.physics);
 		this.addObserver(this.world);
-		this.addObserver(this.ai);
 		this.addObserver(this.renderer);
-		this.addObserver(this.gameInputHandler);
-		this.addObserver(this.soundManager);
 
-		this.physics.addObserver(this.soundManager);
-		this.physics.addObserver(this.physics);
-		this.ai.addObserver(this.physics);
-		this.world.addObserver(this.soundManager);
-		this.gameInputHandler.addObservers(this.physics);
-		this.gameInputHandler.addObservers(this.soundManager);
-
-		this.world.addObserver(this.gameInputHandler);
-		this.world.addObserver(this.ai);
-
-
-		//this.soundManager.update(Events.newLevelLoadEvent());
-
+		// Set up the Swing stuff
 		this.frame = UI.getFrame();
 		this.frame.setVisible(false);
 		this.frame.dispose();
@@ -78,6 +56,7 @@ public class Main extends Subject {
 		JComponent canvas = ((JComponent)UI.theUI.canvas);
 		UI.setDivider(0);
 
+		// Set up the globals
 		Globals.mainCanvas = canvas;
 		Globals.mainMenu = new MainMenu(this, this.frame.getWidth(), this.frame.getHeight());
 		Globals.winMenu = new WinMenu(this, this.frame.getWidth(), this.frame.getHeight());
@@ -85,10 +64,9 @@ public class Main extends Subject {
 
 		Globals.CurrentMenu = Globals.mainMenu;
 		Globals.pauseMenu = new PauseMenu(this, this.frame.getWidth(), this.frame.getHeight());
-		Globals.menuInputHandler = this.menuInput;
-		Globals.gameInputHandler = this.gameInputHandler;
 		Globals.currentInputHandler = Globals.menuInputHandler;
-		Globals.world = this.world;
+
+		InputHandler inputWrapper = new InputHandler();
 
 		canvas.addKeyListener(inputWrapper);
 		canvas.addMouseListener(inputWrapper);
@@ -96,9 +74,6 @@ public class Main extends Subject {
 
 		this.notifyObservers(Events.newInitialLoadEvent());
 		this.notifyObservers(Events.newMenuUpdate());
-
-		System.out.println(Globals.mainCanvas.getSize().getWidth() + " : " + Globals.mainCanvas.getSize().getHeight());
-
 	}
 
 	/**
@@ -108,8 +83,25 @@ public class Main extends Subject {
 		this.frame.dispatchEvent(new WindowEvent(this.frame, WindowEvent.WINDOW_CLOSING));
 	}
 
-	public static void main(String[] args) {
-		new Main();
+	public void loadNewWorld(String worldName){
+		World world = new World();
+		world.setCurrentLevel(Loader.loadLevel("worldName"));
+		Physics physics = new Physics();
+		AI ai = new AI();
+		SoundManager soundManager = new SoundManager();
+		Globals.currentInputHandler = new GameInputHandler();
+
+		world.addObserver(Globals.currentInputHandler);
+		world.addObserver(physics);
+		world.addObserver(ai);
+		world.addObserver(soundManager);
+		ai.addObserver(physics);
+		physics.addObserver(soundManager);
+		physics.addObserver(physics);
+		Globals.currentInputHandler.addObserver(soundManager);
+		Globals.currentInputHandler.addObserver(physics);
+
+		world.notifyObservers(Events.newLevelLoadEvent(world));
 	}
 
 	/**
@@ -117,8 +109,7 @@ public class Main extends Subject {
 	 * sets up the globals ect.
 	 */
 	public void start(){
-		this.world.setCurrentLevel(Loader.loadLevel("1"));
-		this.world.notifyObservers(Events.newLevelLoadEvent(this.world));
+		this.loadNewWorld("1");
 
         Globals.hud = new HUD((Player)this.world.getEntitiesWithType("Player").iterator().next());
         Globals.gameState = Globals.GameState.IN_GAME;

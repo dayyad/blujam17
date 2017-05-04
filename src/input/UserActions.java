@@ -1,48 +1,52 @@
 package input;
 
+import events.Observable;
+import events.Subject;
+
 import java.awt.event.*;
 
 /**
- * Created by mgoo on 3/05/17.
+ * This is the base class to handle all user actions
+ * @author Andrew McGhie
  */
-public interface UserActions{
-    default void keyTyped(KeyEvent e) {
+public abstract class UserActions extends Subject implements Observable{
+    public void keyTyped(KeyEvent e) {
 
     }
 
-    default void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e) {
 
     }
 
-    default void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent e) {
 
     }
 
-    default void mouseClicked(MouseEvent e) {
+    public void mouseClicked(MouseEvent e) {
 
     }
 
-    default void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent e) {
 
     }
 
-    default void mouseReleased(MouseEvent e) {
+    public void mouseReleased(MouseEvent e) {
 
     }
 
-    default void mouseEntered(MouseEvent e) {
+    public void mouseEntered(MouseEvent e) {
 
     }
 
-    default void mouseExited(MouseEvent e) {
+    public void mouseExited(MouseEvent e) {
 
     }
 
-    default void mouseDragged(MouseEvent e) {
+    public void mouseDragged(MouseEvent e) {
 
     }
 
-    default void mouseMoved(MouseEvent e) {
+    public void mouseMoved(MouseEvent e) {
 
     }
 }

@@ -23,16 +23,6 @@ public class Globals {
 
     public static World world;
 
-    // TODO do not store all the menues here instantiate them as needed
-    public static Menu pauseMenu;
-    public static Menu mainMenu;
-    public static Menu dieMenu;
-    public static Menu winMenu;
-
-    // TODO do not store all the input handlers here instantiate them as needed
-    public static UserActions gameInputHandler;
-    public static UserActions menuInputHandler;
-
-    /// TODO no again
+    /// TODO do not store here
     public static HUD hud;
 }

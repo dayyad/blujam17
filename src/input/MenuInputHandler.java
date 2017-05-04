@@ -1,8 +1,7 @@
 package input;
 
-import events.Events;
+import events.*;
 import main.Globals;
-import events.Subject;
 import renderer.Renderer;
 
 import java.awt.event.KeyEvent;
@@ -11,11 +10,11 @@ import java.awt.event.MouseEvent;
 /**
  * Created by mgoo on 22/04/17.
  */
-public class MenuInputHandler implements UserActions {
+public class MenuInputHandler extends UserActions implements Subjectable{
 
     private Subject subject;
 
-    public MenuInputHandler(Renderer renderer){
+    public MenuInputHandler(){
         this.subject = new Subject() {};
     }
 
@@ -35,5 +34,14 @@ public class MenuInputHandler implements UserActions {
     public void mouseMoved(MouseEvent e) {
         Globals.CurrentMenu.getInteractableItems().forEach((item) -> item.onMove(e.getX(), e.getY()));
         this.subject.notifyObservers(Events.newMenuUpdate());
+    }
+
+    @Override
+    public void update(Event event) {
+        // Does not take any events
+    }
+
+    public void addObserver(Observable observer){
+        this.subject.addObserver(observer);
     }
 }

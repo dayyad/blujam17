@@ -6,18 +6,15 @@ import java.awt.image.BufferedImage;
 import java.util.NoSuchElementException;
 
 import events.Event;
+import events.LevelLoadEvent;
 import main.Globals;
 import events.Observable;
 import world.Stage;
 import world.World;
 
 public class Renderer implements Observable {
-	private final World world;
+	private World world;
 	private BufferedImage offScreen;
-
-	public Renderer(World world) {
-		this.world = world;
-	}
 
 	@Override
 	public void update(Event e) {
@@ -27,6 +24,10 @@ public class Renderer implements Observable {
 				break;
 			case MENU_UPDATE:
 				this.render();
+				break;
+			case LEVEL_LOAD:
+				LevelLoadEvent levelLoadEvent = (LevelLoadEvent)e;
+				this.world = levelLoadEvent.getWorld();
 				break;
 		}
 	}

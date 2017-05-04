@@ -5,15 +5,13 @@ import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-import events.Event;
-import events.Events;
-import events.Observable;
-import events.Subject;
+import events.*;
 import main.*;
+import world.Level;
 import world.Player;
 import world.World;
 
-public class GameInputHandler implements Observable, UserActions {
+public class GameInputHandler extends UserActions {
 	private static final int MOUSE_MOVE = 0;
 	private static final int MOUSE_CLICK = 1;
 
@@ -110,8 +108,10 @@ public class GameInputHandler implements Observable, UserActions {
 				}
 				break;
 			case LEVEL_LOAD:
+				LevelLoadEvent levelLoadEvent = (LevelLoadEvent)event;
+				Player newPlayer = (Player)(levelLoadEvent.getWorld().getEntitiesWithType("Player").iterator().next());
+
 				// TODO THIIS SHOULD NOT BE RESPONSIBLE FOR HEALTH CARRY OVER!!!!
-				Player newPlayer = (Player)((World)event.getContext()).getEntitiesWithType("Player").iterator().next();
 				if (this.player != null)newPlayer.setHealth(this.player.getHealth());
 				this.player = newPlayer;
 				if (Globals.hud != null)Globals.hud.setPlayer(this.player);

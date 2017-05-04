@@ -5,7 +5,7 @@ import java.util.HashSet;
 /**
  * Defines the notifyObservers and a set of Observers
  */
-public abstract class Subject {
+public abstract class Subject implements Subjectable {
 	private Collection<Observable> observers = new HashSet<>();
 
 	/**
