@@ -1,0 +1,401 @@
+@startuml
+title "Overview of the system"
+main.Main         <--  world.World:         Observes
+world.World       <--  input.UserActions:   Observes
+world.World       <--  physics.Physics:     Observes
+world.World       <--  ai.AI:               Observes
+world.World       <--  sound.SoundManager:  Observes
+world.World       <--  renderer.Renderer:   Observes
+ai.AI             <--  physics.Physics:     Observes
+physics.Physics   <--  sound.SoundManager:  Observes
+physics.Physics   <--  physics.Physics:     Observes
+input.UserActions <--  sound.SoundManager:  Observes
+input.UserActions <--  physics.Physics:     Observes
+input.UserActions <--  renderer.Renderer:   Observes
+
+package main {
+    world.World -- GameState: World
+    Command -- world.Entity: Actor
+    Main -- GameState
+
+    abstract class Command {
+        execute()
+    }
+    class GameState {
+        {static} currentState: GameState.GameState_enum
+        {static} currentMenu: Menu
+        {static} mainCanvas: JComponent
+    }
+    class Main {
+        quit()
+        loadNewWorld(String)
+        start()
+        {static} main(String[])
+    }
+    enum "GameState.GameState_enum" as GS {
+        IN_MENU
+        IN_GAME
+        PAUSED
+        LOADING
+        DIE
+    }
+}
+package events {
+    Subject --|> Subjectable
+
+    LevelLoadEvent --|> Event
+    CollisionEvent --|> Event
+    MoveEvent --|> Event
+
+    world.World --|> Subject
+    input.UserActions --|> Subject
+    input.MenuInputHandler -- Subject
+    input.MenuInputHandler --|> Subjectable
+
+    input.UserActions --|> Observable
+    world.World --|> Observable
+    ai.AI --|> Observable
+    sound.SoundManager --|> Observable
+    renderer.Renderer --|> Observable
+    physics.Physics --|> Observable
+
+    EventType -- Event
+
+    class Subjectable {
+        addObserver(Observable)
+    }
+
+    abstract class Subject {
+        notifyObservers(Event)
+        removeObserver(Observable)
+        removeAllObservers
+    }
+    interface Observable {
+        update(event)
+    }
+    class Event {
+        addActor(Entity)
+        addActors(Collection<Entity>)
+        getContext(): Object
+        getType(): EventType
+    }
+    class Events {
+        {static} newLoadLevelEvent(World): LevelLoadEvent
+        {static} newMoveEvent(Entity, double, double): MoveEvent
+        {static} newCollisionEvent(Entity, Entity): CollisionEvent
+        {static} newDieEvent(): Event
+        {static} newEvent(EventType): Event
+        {static} newEvent(EventType, Object): Event
+        {static} newInitialLoadEvent(): Event
+        {static} newTickEvent(): Event
+        {static} newMenuUpdate(): Event
+        {static} newStopEvent(Entity): Event
+        {static} newShootEvent(Entity): Event
+    }
+    enum "Events.EventType" as EventType {
+        MOVE
+        STOP
+        TICK
+        LEVEL_LOAD
+        INITIAL_LOAD
+        MENU_UPDATE
+        SHOOT
+        DIE
+        PHYSICS_COLLISION
+    }
+
+    class LevelLoadEvent {
+        getWorld()
+    }
+    class MoveEvent {
+        execute()
+        getEntity(): Entity
+        getX(): double
+        getY(): double
+    }
+    class CollisionEvent {
+        getEntity1(): Entity
+        getEntity2(): Entity
+        getNPC(): NPC
+        getPlayer(): Player
+        getProjectile(): Projectile
+        getStage(): Stage
+        hasNPC(): boolean
+        hasPlayer(): boolean
+        hasProjectile(): boolean
+        hasStage(): boolean
+    }
+}
+
+package input {
+    MenuInputHandler --|> UserActions
+
+    GameInputHandler --|> UserActions
+
+    main.GameState -- UserActions
+
+    class GameInputHandler {
+
+    }
+    class MenuInputHandler {
+
+    }
+    class InputHandler {
+        keyTyped(KeyEvent)
+        keyPressed(KeyEvent)
+        keyReleased(KeyEvent)
+        mouseClicked(MouseEvent)
+        mousePressed(MouseEvent)
+        mouseReleased(MouseEvent)
+        mouseEntered(MouseEvent)
+        mouseExited(MouseEvent)
+        mouseDragged(MouseEvent)
+        mouseMoved(MouseEvent)
+    }
+    abstract class UserActions {
+        keyTyped(KeyEvent)
+        keyPressed(KeyEvent)
+        keyReleased(KeyEvent)
+        mouseClicked(MouseEvent)
+        mousePressed(MouseEvent)
+        mouseReleased(MouseEvent)
+        mouseEntered(MouseEvent)
+        mouseExited(MouseEvent)
+        mouseDragged(MouseEvent)
+        mouseMoved(MouseEvent)
+    }
+}
+
+package sound {
+    class SoundManager
+}
+
+package renderer {
+    main.GameState -- HUD
+    HUD --|> Renderable
+
+    class HUD {
+
+    }
+    class Renderer {
+
+    }
+    interface Renderable {
+        sprite: Image
+        getRotation(): double
+        getX(): double
+        getY(): double
+    }
+}
+
+package physics {
+    Move --|> main.Command
+
+    class Physics {
+
+    }
+    class Move {
+        execute()
+        getDeltaX()
+        getDeltaY()
+    }
+    class CollisionManager {
+
+    }
+}
+
+package ai {
+    MovementManager o-- MMS
+    MovementManager o-- java.awt.Point
+    (MovementManager, MMS) -- world.Entity
+    (MovementManager, java.awt.Point) -- world.Entity
+
+    class AI {
+
+    }
+    class MovementManager {
+        getMovement(Entity): MoveEvent
+    }
+    ' I im pretty sure these arent used
+    enum "MovementManager State" as MMS {
+        CHASING
+        WALKING
+        STOPPED
+    }
+}
+
+package menu {
+    main.GameState -- Menu: currentMenu
+
+    MainMenu --|> Menu
+    PauseMenu --|> Menu
+    WinMenu --|> Menu
+    DieMenu --|> Menu
+    Menu --|> renderer.Renderable
+
+    abstract class Menu {
+        x: int
+        y: int
+        width: int
+        height: int
+    }
+    class MainMenu {
+
+    }
+    class PauseMenu {
+
+    }
+    class WinMenu {
+
+    }
+    class DieMenu {
+
+    }
+
+    package ui_elements {
+        Menu "1" x-- "*" Item: Items
+        Menu "1" x-- "*" InteractableItem: Interactable Items
+
+        InteractableItem --|> Item
+        Button --|> InteractableItem
+        Toggle --|> InteractableItem
+        abstract class Item {
+            height: int
+            width: int
+            x: int
+            y: int
+            getImage(): Image
+            setParent(Menu)
+            contains(int, int): boolean
+
+        }
+        abstract class InteractableItem {
+            onClick(int, int)
+            onMove(int, int)
+            onPress(int, int)
+            onRelese(int, int)
+        }
+        class Button {
+            setHoverImg(Image)
+            setNormalImg(Image)
+            setPressedImg(Image)
+            setOnClickEvent(Click)
+        }
+        class Toggle {
+
+        }
+    }
+}
+
+package world {
+    Footstep --|> Entity
+    Footstep --|> renderer.Renderable
+
+    NPC --|> Entity
+    NPC --|> Animatable
+    NPC -- Animator
+
+    Player --|> Entity
+    Player --|> Animatable
+    Player -- Animator
+
+    Projectile --|> Entity
+    Projectile "1" x-- Entity: Owner
+    Projectile --|> renderer.Renderable
+
+    Stage --|> Entity
+    Stage --|> renderer.Renderable
+
+    StaticSprite --|> Entity
+    StaticSprite --|> renderer.Renderable
+
+    Level "1" *-- "*" Entity
+    Level "1" *-- "*" renderer.Renderable
+    Level "1" *-- "*" Animatable
+    Level "1" *-- "*" NPC
+    Level "1" *-- "*" Player
+    Level "1" *-- "*" Stage
+
+    World -- Level: currentLevel
+
+
+    interface Animatable {
+
+    }
+    class Animator {
+
+    }
+    abstract class Entity {
+        x: double
+        y: double
+        rotation: double
+        movementSpeed: double
+        isNPC(): boolean
+        move(double, double)
+        moveTo(double, double)
+        pointTo(double, double)
+        shoot(): Projectile
+    }
+    class Footstep {
+
+    }
+    class Level {
+
+    }
+    class NPC {
+        deathSprite: Image
+        damage(double)
+        die()
+        isInfected(): boolean
+        setInfected(boolean)
+    }
+    class Player {
+        addHealth(double)
+        die()
+        getDamage(): double
+        getHealth(): double
+        removeHealth()
+        setHealth()
+    }
+    class Projectile {
+        getMovement(): MoveEvent
+    }
+    class Stage {
+
+    }
+    class StaticSprite {
+
+    }
+    class World {
+
+    }
+
+    package loader {
+        main.Main -- Loader
+        class Loader {
+            loadLevel(String): level
+        }
+        'class Saver {
+        '    Not Implemented
+        '}
+    }
+    package movement {
+        world.Projectile --|> movement.Collidable
+        world.NPC --|> movement.Collidable
+        world.Player --|> movement.Collidable
+        world.Stage --|> movement.Collidable
+        world.Level "1" -- "*" movement.Collidable
+
+        interface movement.Collidable {
+            getCollisionMap(): Color[][]
+            setCollitionMap(Color[][])
+        }
+        'class Collider {
+        ' Not used or implemented
+        '}
+        'class MovementNode {
+        '
+        '}
+    }
+}
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+
+[*] -> MainMenu
+MainMenu -> loadingLevel : startButtonPressed
+MainMenu --> [*] : exitButtonPressed
+loadingLevel --> playingGame : FinishedLoading
+playingGame --> loadingLevel : Levelfinished / currentLevel++
+playingGame --> Paused : pauseButtonPressed
+playingGame --> endScreen : playerDied
+playingGame --> endScreen : finalLevelFinished
+Paused --> playingGame : resumeButtonPressed
+Paused --> MainMenu : mainMenuButtonPressed / Game.exit()
+endScreen --> loadingLevel : retryButtonPressed / Game.reset()
+endScreen --> MainMenu : mainMenuButtonPressed
+endScreen --> [*] : quitGameButtonPressed
+
+MainMenu : exit / setCurrentLevel(1)
+loadingLevel : entry / loadLevel(currentLevel)
+loadingLevel : exit / Game.start()
+Paused : entry / Game.pause()
+Paused : exit / Game.unpause()
+
+
+@enduml

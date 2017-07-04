@@ -1,0 +1,40 @@
+@startuml
+object renderer
+object world
+object ai
+object physics
+object soundManager
+object gameInputHandler
+object main
+object menuInputHandler
+
+main : TICK
+main : INITIAL_LOAD
+main : MENU_UPDATE
+
+world : LEVEL_LOAD
+world : TICK
+
+physics : PHYSICS_COLLISION
+ai : MOVE
+
+gameInputHandler : MENU_UPDATE
+gameInputHandler : MOVE
+gameInputHandler : STOP
+gameInputHandler : SHOOT
+
+
+main <-- world
+main <-- renderer
+
+world <-- ai
+world <-- soundManager
+world <-- physics
+world <-- gameInputHandler
+ai <-- physics
+physics <-- soundManager
+physics <-- physics
+gameInputHandler <-- soundManager
+gameInputHandler <-- physics
+
+@enduml

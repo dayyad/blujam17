@@ -1,0 +1,18 @@
+@startuml
+[*] -> Walking
+Walking -> Chasing: Tick [PlayerInlos] / setTarget(player.location)
+Walking -> Stopped: Tick [timer = 0]
+Stopped -> Chasing: Tick [PlayerInlos] / setTarget(player.location)
+Stopped -> Walking: Tick [timer = 0]
+Walking --> Dead: PhysicsCollision [entity.health <= 0] / entity.die()
+Chasing --> Dead: PhysicsCollision [entity.health <= 0] / entity.die()
+Stopped --> Dead: PhysicsCollision [entity.health <= 0] / entity.die()
+Dead --> [*]: Tick / entity.remove()
+
+Stopped: timer = 10
+Stopped: do / decrease timer
+Stopped: exit / entity.unstop
+
+Walking: timer = 10
+Walking: do / decrease timer
+@enduml
