@@ -1,6 +1,6 @@
 package world;
 
-import main.Globals;
+import main.GameState;
 import renderer.Renderable;
 
 import javax.imageio.ImageIO;
@@ -18,7 +18,8 @@ public class Footstep extends Entity implements Renderable {
     long age = 0;
     BufferedImage sprite;
 
-    public Footstep(double x, double y, double rotation){
+    public Footstep(World world, double x, double y, double rotation){
+        super(world);
         this.setX(x);
         this.setY(y);
         this.setRotation(rotation);
@@ -39,7 +40,7 @@ public class Footstep extends Entity implements Renderable {
     @Override
     public Image getSprite() {
         age++;
-        if (age > MAX_AGE) Globals.world.removeEntity(this);
+        if (age > MAX_AGE) this.world.removeEntity(this);
         return this.sprite;
     }
 }

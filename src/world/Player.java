@@ -1,11 +1,10 @@
 package world;
 
-import java.awt.Color;
-import java.awt.Image;
-import java.util.List;
-
-import main.Globals;
+import main.GameState;
 import world.movement.Collidable;
+
+import java.awt.*;
+import java.util.List;
 
 public class Player extends Entity implements Collidable, Animatable{
 
@@ -19,7 +18,8 @@ public class Player extends Entity implements Collidable, Animatable{
 
 	public void setHealth(double health){this.health = health;}
 
-	public Player(double x, double y){
+	public Player(World world, double x, double y){
+		super(world);
 		this.animator = new Animator();
 		this.rotation = 0;
 		this.x = x;
@@ -71,10 +71,7 @@ public class Player extends Entity implements Collidable, Animatable{
 	}
 
 	public void die(){
-		Globals.CurrentMenu = Globals.dieMenu;
-		Globals.currentInputHandler = Globals.menuInputHandler;
-		Globals.gameState = Globals.GameState.DIE;
-		Globals.world.resetLevels();
+		GameState.instance().die();
 	}
 
 }

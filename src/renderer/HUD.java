@@ -1,13 +1,13 @@
 package renderer;
 
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-
-import main.Globals;
+import main.Environment;
+import main.GameState;
 import world.Player;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by mgoo on 23/04/17.
@@ -59,7 +59,7 @@ public class HUD implements Renderable{
 
     @Override
     public double getY() {
-        return Globals.mainCanvas.getHeight() - 100;
+        return Environment.canvas.getHeight() - 100;
     }
 
     @Override

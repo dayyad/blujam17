@@ -3,7 +3,8 @@ package input;
 import events.Observable;
 import events.Subject;
 
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 /**
  * This is the base class to handle all user actions

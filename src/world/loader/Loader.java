@@ -1,28 +1,17 @@
 package world.loader;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
-import java.awt.image.Raster;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.util.*;
-import java.util.List;
-
-import ai.*;
-import events.*;
-import input.*;
-import main.*;
-import network.*;
-import physics.*;
-import renderer.*;
-import sound.*;
+import main.Environment;
+import main.GameState;
 import world.*;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
+import java.util.List;
 
 public class Loader {
 
@@ -40,7 +29,7 @@ public class Loader {
      * @return
      */
 
-    public static Level loadLevel(String number) {
+    public static Level loadLevel(World world, String number) {
         File entityFile = new File("assets/leveldata/level_" + number + "_entities.dat");
         Level newLevel = new Level();
 
@@ -78,7 +67,7 @@ public class Loader {
                         double x = Double.parseDouble(fieldMap.get("positionX"));
                         double y = Double.parseDouble(fieldMap.get("positionY"));
 
-                        newEntity = new NPC();
+                        newEntity = new NPC(world);
                         newEntity.setMovementSpeed(Double.parseDouble(fieldMap.get("MaxSpeed")));
                         ((NPC)newEntity).setDeathSprite(fieldMap.get("DeathSprite"));
                         newEntity.setX(x);
@@ -88,18 +77,24 @@ public class Loader {
                         break;
                     case "Stage":
                         String name = fieldMap.get("Name");
-                        newEntity = new Stage(spriteMap.get(name), collisionMap.get(name));
+                        newEntity = new Stage(world, spriteMap.get(name), collisionMap.get(name));
                         break;
                     case "Player":
                         x = Double.parseDouble(fieldMap.get("positionX"));
                         y = Double.parseDouble(fieldMap.get("positionY"));
-                        newEntity = new Player(x, y);
-                        newEntity.setMovementSpeed(Double.parseDouble(fieldMap.get("MaxSpeed")));
-                        ((Player) newEntity).setFrames(animationMap.get("Player"));
-                        ((Player) newEntity).setCollisionMap(collisionMap.get("Player"));
+                        if (world.getEntitiesWithType("Player").size() == 0) {
+                            newEntity = new Player(world, x, y);
+                            newEntity.setMovementSpeed(Double.parseDouble(fieldMap.get("MaxSpeed")));
+                            ((Player) newEntity).setFrames(animationMap.get("Player"));
+                            ((Player) newEntity).setCollisionMap(collisionMap.get("Player"));
+                        } else {
+                            world.getEntitiesWithType("Player").iterator().next().moveTo(x,y);
+                        }
                         break;
                 }
-                newLevel.addEntity(newEntity);
+                if (newEntity != null) {
+                    newLevel.addEntity(newEntity);
+                }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -145,7 +140,7 @@ public class Loader {
                 } else if (type.equals("Collidable")){
                     Image img;
                     if (chunk.length > 3 && chunk[3].equals("scale")) {
-                        img = ImageIO.read(new File(chunk[2].split(":")[1])).getScaledInstance(Globals.mainCanvas.getWidth(), Globals.mainCanvas.getHeight(), Image.SCALE_SMOOTH);
+                        img = ImageIO.read(new File(chunk[2].split(":")[1])).getScaledInstance(Environment.canvas.getWidth(), Environment.canvas.getHeight(), Image.SCALE_SMOOTH);
                     } else {
                         img = ImageIO.read(new File(chunk[2].split(":")[1]));
                     }

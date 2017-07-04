@@ -3,6 +3,7 @@ package sound;
 import ecs100.Sound;
 import events.CollisionEvent;
 import events.Event;
+import events.MoveEvent;
 import events.Observable;
 import physics.Move;
 import world.Player;
@@ -87,7 +88,7 @@ public class SoundManager implements Observable {
     public void update(Event event) {
         switch (event.getType()){
             case MOVE:
-                if (((Move)event.getContext()).getActor() instanceof Player){
+                if (((MoveEvent)event).getEntity() instanceof Player){
                     if (!this.footsteps.playing()){
                         this.footsteps.play();
                     }

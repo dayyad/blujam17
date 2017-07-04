@@ -1,18 +1,14 @@
 package menu;
 
-import ecs100.UI;
+import input.MenuInputHandler;
+import input.UserActions;
 import menu.ui_elements.InteractableItem;
 import menu.ui_elements.Item;
 import renderer.Renderable;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.Buffer;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -42,21 +38,49 @@ public abstract class Menu implements Renderable {
     public int getWidth(){return this.width;}
     public int getHeight(){return this.height;}
 
-    public void setBackground(BufferedImage background){
+    void setBackground(BufferedImage background){
         Image img = background.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
         BufferedImage image = new BufferedImage(img.getWidth(null), img.getWidth(null), BufferedImage.TYPE_INT_ARGB);
         Graphics2D img_graphics = image.createGraphics();
         img_graphics.drawImage(img, 0, 0, null);
         this.background = image;
     }
-    public void add(Item item){
+
+    /**
+     * Adds an Item to the Menu.
+     * @param item
+     */
+    void add(Item item){
         this.items.add(item);
         item.setParent(this);
-        if (item instanceof InteractableItem){
-            this.interactableItems.add((InteractableItem)item);
-        }
     }
-    public List<InteractableItem> getInteractableItems(){return this.interactableItems;}
+
+    /**
+     * {@inheritDoc}
+     */
+    void add(InteractableItem item) {
+        this.add((Item)item);
+        this.interactableItems.add(item);
+    }
+
+    /**
+     * Makes a new input handler to replace the current global input handler
+     * TODO Should only be used once per menu
+     * @return
+     */
+    public UserActions makeInputHandler() {
+        return new MenuInputHandler(this);
+    }
+
+    /**
+     * Gets a list of all the items that a user can iteract with
+     * @return
+     */
+    public List<InteractableItem> getInteractableItems(){
+        return this.interactableItems;
+    }
+
+
 
     @Override
     public Image getSprite(){

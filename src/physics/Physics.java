@@ -1,8 +1,12 @@
 package physics;
 
 import events.*;
-import main.Globals;
-import world.*;
+import main.Environment;
+import main.GameState;
+import world.Entity;
+import world.Player;
+import world.Projectile;
+import world.World;
 import world.loader.Loader;
 import world.movement.Collidable;
 
@@ -38,6 +42,10 @@ public class Physics extends Subject implements Observable {
 					this.projectiles.remove(collisionEvent.getProjectile());
 					this.world.removeEntity(collisionEvent.getProjectile());
 				}
+				if (collisionEvent.hasProjectile() && collisionEvent.hasNPC()) {
+					collisionEvent.getNPC().damage(((Player)collisionEvent.getProjectile().getOwner()).getDamage());
+					this.world.removeEntity(collisionEvent.getProjectile());
+				}
 				break;
 			case MOVE:
 				this.move((MoveEvent)e);
@@ -46,8 +54,8 @@ public class Physics extends Subject implements Observable {
 				for (int i = 0; i < this.projectiles.size(); i++){
 					if (this.projectiles.get(i).getX() < 0
 							|| this.projectiles.get(i).getY() < 0
-							|| this.projectiles.get(i).getX() > Globals.mainCanvas.getWidth()
-							|| this.projectiles.get(i).getY() > Globals.mainCanvas.getHeight()){
+							|| this.projectiles.get(i).getX() > Environment.canvas.getWidth()
+							|| this.projectiles.get(i).getY() > Environment.canvas.getHeight()){
 						this.world.removeEntity(this.projectiles.get(i));
 						this.projectiles.remove(i);
 						i--;
@@ -91,14 +99,11 @@ public class Physics extends Subject implements Observable {
 			CollisionManager.CollisionType collisionType = this.collisionManager.checkCollisionMap(newX, newY, ((Collidable)entity).getCollisionMap(), otherEntity);
 
 			if (collisionType.equals(CollisionManager.CollisionType.NEXT_LEVEL) && entity instanceof Player){
-				this.world.setCurrentLevel(Loader.loadLevel( (++this.world.level) + ""));
+				this.world.setCurrentLevel(Loader.loadLevel(this.world, (++this.world.level) + ""));
 				this.world.notifyObservers(Events.newLevelLoadEvent(this.world));
 			}
 			if (collisionType.equals(CollisionManager.CollisionType.WIN_GAME) && entity instanceof Player){
-				Globals.CurrentMenu = Globals.winMenu;
-				Globals.currentInputHandler = Globals.menuInputHandler;
-				Globals.gameState = Globals.GameState.DIE;
-				this.world.resetLevels();
+				GameState.instance().win();
 			}
 
 			if (!collisionType.equals(CollisionManager.CollisionType.NO_COLLISION)){

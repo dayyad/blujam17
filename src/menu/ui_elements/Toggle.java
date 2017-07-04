@@ -1,7 +1,5 @@
 package menu.ui_elements;
 
-import menu.ui_elements.Button.State;
-
 import java.awt.*;
 
 /**

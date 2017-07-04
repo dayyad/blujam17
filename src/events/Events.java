@@ -1,10 +1,6 @@
 package events;
 
-import physics.Move;
 import world.Entity;
-import world.NPC;
-import world.Player;
-import world.Projectile;
 import world.World;
 
 /**
@@ -31,7 +27,7 @@ public class Events {
 		PHYSICS_COLLISION,
 
 	}
-	public static Event newLevelLoadEvent(World world) {
+	public static LevelLoadEvent newLevelLoadEvent(World world) {
 		return new LevelLoadEvent(world);
 	}
 
@@ -39,7 +35,7 @@ public class Events {
 		return new MoveEvent(entity, x, y);
 	}
 
-	public static Event newCollisionEvent(world.Entity e1, world.Entity e2){
+	public static CollisionEvent newCollisionEvent(world.Entity e1, world.Entity e2){
 		return new CollisionEvent(e1, e2);
 	}
 

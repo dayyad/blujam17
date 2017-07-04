@@ -1,7 +1,7 @@
 package ai;
 
-import events.*;
-import menu.PauseMenu;
+import events.Events;
+import events.MoveEvent;
 import world.Entity;
 
 import java.awt.*;
@@ -19,6 +19,7 @@ class MovementManager {
 
     private Map<Entity, state> entityStateMap = new HashMap<>();
     private Map<Entity, Point> entityTargetMap = new HashMap<>();
+    // TODO try to remove player dependancy
     private final Entity playerEntity;
 
     MovementManager(Entity playerEntity){

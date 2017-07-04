@@ -1,9 +1,7 @@
 package world;
 
-import main.Globals;
+import main.GameState;
 import world.loader.Loader;
-
-import java.awt.*;
 
 /**
  * @author Vo
@@ -23,8 +21,10 @@ public abstract class Entity {
 	// Interface replacement fields
 	boolean isNPC;
 
-	public Entity() {
-		// Placeholder
+	World world;
+
+	public Entity(World world) {
+		this.world = world;
 	}
 
 	/**
@@ -126,9 +126,9 @@ public abstract class Entity {
 	}
 
 	public Projectile shoot(){
-		Projectile projectile = new Projectile(this.getX(), this.getY(), this.getRotation() + Math.random()/2, this);
+		Projectile projectile = new Projectile(this.world, this.getX(), this.getY(), this.getRotation() + Math.random()/2, this);
 		projectile.setCollisionMap(Loader.collisionMap.get("bullet"));
-		Globals.world.addEntity(projectile);
+		this.world.addEntity(projectile);
 		return projectile;
 	}
 

@@ -1,15 +1,13 @@
 package input;
 
+import events.*;
+import main.GameState;
+import world.Player;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
-
-import events.*;
-import main.*;
-import world.Level;
-import world.Player;
-import world.World;
 
 public class GameInputHandler extends UserActions {
 	private static final int MOUSE_MOVE = 0;
@@ -20,7 +18,6 @@ public class GameInputHandler extends UserActions {
 	}
 
 	private Player player;
-	private Subject subject;
 
 	private Map<Integer, Boolean> keyPressedMap = new HashMap<>();
 	private Map<Action, Integer> keyBindings = new HashMap<>();
@@ -39,22 +36,14 @@ public class GameInputHandler extends UserActions {
 		keyBindings.put(Action.PAUSE, KeyEvent.VK_ESCAPE);
 
 		keyBindings.put(Action.ROTATE, MOUSE_MOVE);
-
-		this.subject = new Subject() {};
-	}
-
-	public void addObservers(Observable observer){
-		subject.addObserver(observer);
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (!this.keyBindings.values().contains(e.getKeyCode()))return;
 		if (this.keyBindings.get(Action.PAUSE).equals(e.getKeyCode())){
-			Globals.gameState = Globals.GameState.PAUSED;
-			Globals.CurrentMenu = Globals.pauseMenu;
-			Globals.currentInputHandler = Globals.menuInputHandler;
-			subject.notifyObservers(Events.newMenuUpdate());
+			GameState.instance().pause();
+			this.notifyObservers(Events.newMenuUpdate());
 		} else {
 			this.keyPressedMap.put(e.getKeyCode(), true);
 		}
@@ -68,7 +57,7 @@ public class GameInputHandler extends UserActions {
 
 	@Override
 	public synchronized void mousePressed(MouseEvent e) {
-		subject.notifyObservers(Events.newShootEvent(this.player));
+		this.notifyObservers(Events.newShootEvent(this.player));
 	}
 
 	@Override
@@ -97,27 +86,20 @@ public class GameInputHandler extends UserActions {
 				}
 
 				if (deltaX == 0 && deltaY == 0){
-					subject.notifyObservers(Events.newStopEvent(this.player));
+					this.notifyObservers(Events.newStopEvent(this.player));
 				} else if (deltaX == 0 ^ deltaY == 0){
-					subject.notifyObservers(Events.newMoveEvent(this.player, deltaX * this.player.getMovementSpeed(), deltaY * this.player.getMovementSpeed()));
+					this.notifyObservers(Events.newMoveEvent(this.player, deltaX * this.player.getMovementSpeed(), deltaY * this.player.getMovementSpeed()));
 				} else {
 					double hyp = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 					deltaX = (this.player.getMovementSpeed() / hyp * deltaX);
 					deltaY = (this.player.getMovementSpeed() / hyp * deltaY);
-					subject.notifyObservers(Events.newMoveEvent(this.player, deltaX, deltaY));
+					this.notifyObservers(Events.newMoveEvent(this.player, deltaX, deltaY));
 				}
 				break;
 			case LEVEL_LOAD:
 				LevelLoadEvent levelLoadEvent = (LevelLoadEvent)event;
-				Player newPlayer = (Player)(levelLoadEvent.getWorld().getEntitiesWithType("Player").iterator().next());
-
-				// TODO THIIS SHOULD NOT BE RESPONSIBLE FOR HEALTH CARRY OVER!!!!
-				if (this.player != null)newPlayer.setHealth(this.player.getHealth());
-				this.player = newPlayer;
-				if (Globals.hud != null)Globals.hud.setPlayer(this.player);
-				break;
-			case DIE:
-				this.player = null;
+				if(levelLoadEvent.getWorld().getEntitiesWithType("Player").size() == 0)break;
+				this.player =  (Player)(levelLoadEvent.getWorld().getEntitiesWithType("Player").iterator().next());
 				break;
 		}
 	}

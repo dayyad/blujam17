@@ -1,7 +1,6 @@
 package world;
 
 import events.MoveEvent;
-import physics.Move;
 import renderer.Renderable;
 import world.movement.Collidable;
 
@@ -29,7 +28,8 @@ public class Projectile extends Entity implements Renderable, Collidable {
         this.y = y;
     }
 
-    public Projectile(double x, double y, double rotation, Entity owner){
+    public Projectile(World world, double x, double y, double rotation, Entity owner){
+        super(world);
         this.x = x;
         this.y = y;
         this.rotation = rotation;

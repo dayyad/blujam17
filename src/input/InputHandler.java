@@ -1,6 +1,6 @@
 package input;
 
-import main.Globals;
+import main.GameState;
 
 import java.awt.event.*;
 
@@ -11,51 +11,51 @@ public class InputHandler implements MouseMotionListener, MouseListener, KeyList
 
     @Override
     public void keyTyped(KeyEvent e) {
-        Globals.currentInputHandler.keyTyped(e);
+        GameState.inputHandler.keyTyped(e);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        Globals.currentInputHandler.keyPressed(e);
+        GameState.inputHandler.keyPressed(e);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        Globals.currentInputHandler.keyReleased(e);
+        GameState.inputHandler.keyReleased(e);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        Globals.currentInputHandler.mouseClicked(e);
+        GameState.inputHandler.mouseClicked(e);
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        Globals.currentInputHandler.mousePressed(e);
+        GameState.inputHandler.mousePressed(e);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        Globals.currentInputHandler.mouseReleased(e);
+        GameState.inputHandler.mouseReleased(e);
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        Globals.currentInputHandler.mouseEntered(e);
+        GameState.inputHandler.mouseEntered(e);
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        Globals.currentInputHandler.mouseEntered(e);
+        GameState.inputHandler.mouseEntered(e);
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        Globals.currentInputHandler.mouseDragged(e);
+        GameState.inputHandler.mouseDragged(e);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        Globals.currentInputHandler.mouseMoved(e);
+        GameState.inputHandler.mouseMoved(e);
     }
 }

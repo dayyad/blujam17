@@ -1,6 +1,6 @@
 package world;
-import java.awt.Image;
-import java.util.Collection;
+
+import java.awt.*;
 import java.util.List;
 
 /**

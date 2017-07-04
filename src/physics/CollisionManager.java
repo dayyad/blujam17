@@ -17,7 +17,7 @@ class CollisionManager {
     /**
      * The types of collisions that can occour
      */
-    public enum CollisionType{
+    enum CollisionType{
         NEXT_LEVEL, PRE_LEVEL, ENTITY, MAP, WIN_GAME, START_GAME, NO_COLLISION
     }
 

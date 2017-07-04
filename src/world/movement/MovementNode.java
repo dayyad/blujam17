@@ -2,7 +2,7 @@ package world.movement;
 
 /**
  * For pathing AIs movements to.
- * @author Vo
+ * TODO Not used
  */
 
 public class MovementNode {

@@ -1,9 +1,8 @@
 package world;
 
-import main.Globals;
+import main.GameState;
 
-import java.awt.Color;
-import java.awt.Image;
+import java.awt.*;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,6 +16,10 @@ public class NPC extends Entity implements world.movement.Collidable, Animatable
     double health = 100;
     String deathSprite;
 
+    public NPC(World world) {
+        super(world);
+    }
+
     public String getDeathSprite(){return this.deathSprite;}
     public void setDeathSprite(String deathSprite){this.deathSprite = deathSprite;}
 
@@ -27,7 +30,7 @@ public class NPC extends Entity implements world.movement.Collidable, Animatable
     @Override
     public void move(double deltaX, double deltaY) {
         if (Math.random() > 0.9) {
-            Globals.world.addEntity(new Footstep(this.getX() + (Math.random()*20 - 10), this.getY() + (Math.random()*20 -10), this.getRotation()));
+            this.world.addEntity(new Footstep(this.world, this.getX() + (Math.random()*20 - 10), this.getY() + (Math.random()*20 -10), this.getRotation()));
         }
 
         double padding = 0;
@@ -97,8 +100,8 @@ public class NPC extends Entity implements world.movement.Collidable, Animatable
     }
 
     public void die(){
-        Globals.world.addEntity(new StaticSprite(this.getX(), this.getY(), this.getRotation(), this.deathSprite));
-        Globals.world.removeEntity(this);
+        this.world.addEntity(new StaticSprite(this.world, this.getX(), this.getY(), this.getRotation(), this.deathSprite));
+        this.world.removeEntity(this);
     }
 
 

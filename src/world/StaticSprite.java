@@ -11,7 +11,8 @@ import java.awt.*;
 public class StaticSprite extends Entity implements Renderable {
     private Image sprite;
 
-    public StaticSprite(double x, double y, double rotation, String sprite){
+    public StaticSprite(World world, double x, double y, double rotation, String sprite){
+        super(world);
         this.setX(x);
         this.setY(y);
         this.setRotation(rotation);
@@ -20,7 +21,6 @@ public class StaticSprite extends Entity implements Renderable {
 
     @Override
     public void setSprite(Image sprite) {
-        if (sprite == null)System.out.println("Tht esprite was null");
         this.sprite = sprite;
     }
 

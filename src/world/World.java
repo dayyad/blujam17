@@ -1,16 +1,17 @@
 package world;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Collection;
-
-import ai.AI;
 import events.Event;
 import events.Observable;
 import events.Subject;
-import physics.Physics;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 public class World extends Subject implements Observable {
+
+	private Player player;
 
 	// Map fields
 	private Level currentLevel;
@@ -28,10 +29,17 @@ public class World extends Subject implements Observable {
 
 	// Filters new entities into their relevant places.
 	public void addEntity(Entity entity) {
+		if (entity instanceof Player) {
+			this.player = (Player)entity;
+			return;
+		}
 		currentLevel.addEntity(entity);
 	}
 
 	public synchronized Collection<Entity> getEntitiesWithType(String type) {
+		if (type.equals("Player") && this.player != null) {
+			return Arrays.asList(this.player);
+		}
 		if (currentLevel == null)return new ArrayList<>();
 		return currentLevel.getEntitiesWithType(type);
 	}

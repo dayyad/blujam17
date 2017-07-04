@@ -1,19 +1,16 @@
 package world;
 
-import java.awt.Color;
-import java.awt.Image;
-import java.util.Collection;
-
 import renderer.Renderable;
 import world.movement.Collidable;
-import world.movement.Collider;
+
+import java.awt.*;
 
 public class Stage extends Entity implements Collidable, Renderable {
 	Image sprite;
 	Color[][] collisionMap;
 	
-	public Stage(Image background, Color[][] collisionMap){
-		System.out.println(background);
+	public Stage(World world, Image background, Color[][] collisionMap){
+		super(world);;
 		this.sprite = background;
 		this.collisionMap = collisionMap;
 	}

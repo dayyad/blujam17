@@ -1,7 +1,5 @@
 package menu.ui_elements;
 
-import ecs100.UI;
-
 import java.awt.*;
 
 /**
@@ -32,7 +30,6 @@ public class Button extends InteractableItem {
     public void onMove(int x, int y) {
         if (this.contains(x, y)){
             this.state = State.HOVER;
-            System.out.println("hovering");
         } else {
             this.state = State.NORMAL;
         }

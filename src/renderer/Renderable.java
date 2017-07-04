@@ -1,5 +1,6 @@
 package renderer;
 
+
 import java.awt.Image;
 
 public interface Renderable {

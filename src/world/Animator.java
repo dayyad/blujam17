@@ -1,6 +1,8 @@
 package world;
-import java.awt.Image;
-import java.util.*;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Animator {
 	int hzElapsed = 0;

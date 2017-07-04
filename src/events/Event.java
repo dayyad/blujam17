@@ -1,9 +1,9 @@
 package events;
 
+import events.Events.EventType;
+
 import java.util.ArrayList;
 import java.util.Collection;
-import events.Events.EventType;
-import world.Entity;
 
 public class Event {
 	private EventType type;
