@@ -14,6 +14,7 @@ Here are some screen shots.
 
 ![Alt text](https://github.com/dayyad/blujam17/blob/master/assets/desc2.jpg?raw=true)
 
+Sadly not a lot more images are available for this project as something about the way swing works glitches out screen grabbing tools. These images were captured form a mobile phone and therefore dont show too much detail :( . To enjoy it fully please have a look at our assets folder or try the game for yourself!
 
 Layout planner
 https://drive.google.com/file/d/0B-ZLd7oA73ukQ0hhcDRFTFNIRGs/view?usp=sharing
